@@ -1,10 +1,58 @@
 <!DOCTYPE html>
 <html lang="">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <meta charset="utf-8" />
+    <!-- 如果有安装 Google Chrome Frame 插件则强制为Chromium内核，否则强制本机支持的最高版本IE内核，作用于IE浏览器 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <!-- 强制Chromium内核，作用于360浏览器、QQ浏览器等国产双核浏览器 -->
+    <meta name="renderer" content="webkit" />
+    <!-- 强制Chromium内核，作用于其他双核浏览器 -->
+    <meta name="force-rendering" content="webkit" />
+    <!-- Ie10以下会重定向到升级页 -->
+    <!--[if !IE]-->
+    <meta http-equiv="refresh" content="0; url=/upgrade.html" />
+    <!--[endif]-->
+    <!--
+      shrink-to-fit=no viewport视口设置在IOS9中要想生效需要加上这个
+     -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0，shrink-to-fit=no, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <!-- 页面关键词 便于seo -->
+    <meta id="keywords" name="keywords" content="" />
+    <!-- 页面描述 便于seo -->
+    <meta id="description" name="description" content="不超过150个字符" />
+    <!--搜索引擎抓取  index：文件将被检索； follow：页面上的链接可以被查询；  -->
+    <meta name="robots" content="index,follow" />
+    <!-- 忽略页面中的数字识别为电话，忽略email，adress识别-->
+    <meta name="format-detection" content="telphone=no,email=no,adress=no" />
+    <!-- Web 应用的名称（仅当网站被用作为一个应用时才使用）-->
+    <meta name="application-name" content="应用名称" />
+    <!-- IOS begin -->
+    <!-- 添加到主屏后的标题（iOS 6 新增） -->
+    <meta name="apple-mobile-web-app-title" content="标题" />
+    <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <!-- 添加智能 App 广告条 Smart App Banner（iOS 6+ Safari） -->
+    <meta name="apple-itunes-app" content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL" />
+    <!-- 设置苹果工具栏颜色:默认值为 default（白色），可以定为 black（黑色）和 black-translucent（灰色半透明） -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <!-- 不让百度转码 -->
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!-- 针对手持设备优化，主要是针对一些老的不识别viewport的浏览器，比如黑莓 -->
+    <meta name="HandheldFriendly" content="true" />
+    <!-- 微软的老式浏览器 -->
+    <meta name="MobileOptimized" content="320" />
+    <!-- uc强制竖屏 -->
+    <meta name="screen-orientation" content="portrait" />
+    <!-- QQ强制竖屏 -->
+    <meta name="x5-orientation" content="portrait" />
+    <!-- 安卓添加到主屏 -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <!-- windows phone 点击无高光 -->
+    <meta name="msapplication-tap-highlight" content="no" />
+    <!-- 强制页面显示图片，主要为了防止UC浏览器开启无图模式后，不显示验证码等重要图片，此设置只对当前页面生效，iframe及其他页面无效 -->
+    <!-- 强制图片显示，如果只作用于单图 <img src="..." show="force"> -->
+    <meta name="imagemode" content="force" />
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>

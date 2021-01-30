@@ -1,7 +1,11 @@
 .DS_Store
 node_modules
 /dist
-
+.local
+.history
+*.bak
+*.diff
+*.patch
 
 # local env files
 .env.local
