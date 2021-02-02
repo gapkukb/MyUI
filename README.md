@@ -107,3 +107,67 @@
 50. 突破本地离线存储 5M 限制的 JS 库 localforage
     https://www.zhangxinxu.com/wordpress/2018/06/js-localforage-localstorage-indexdb/
 51. 前端实现定制的 GIF 表情，https://www.zhangxinxu.com/wordpress/2018/05/js-custom-gif-generate/
+52. CSS :default 伪类选择器，不支持 ie，现代浏览器支持很好，匹配 select option 和 radio 的默认选项设置样式。不受 js 后期
+    设置影响。https://www.zhangxinxu.com/study/201803/css-selector-default.html
+53. 滚动容器尺寸变化子元素视觉上位置不变 JS 实现 利用 document.elementsFromPoint api
+54. CSS content 换行实现字符点点点 loading 效果
+    https://www.zhangxinxu.com/wordpress/2016/11/css-content-pre-animation-character-loading/
+55. SVG 粘滞融合分享菜单 https://www.zhangxinxu.com/wordpress/2017/12/svg-filter-fuse-gooey-effect/
+56. 我是如何实现 electron 的在线升级热更新功能的？
+    https://www.zhangxinxu.com/wordpress/2017/06/how-electron-online-update-hot-fix/
+57. **_判断路由(路由器)是否存在上一页_**https://www.zhangxinxu.com/wordpress/2017/02/js-page-url-document-referrer/
+58. 基于 CSS3 column 多栏布局实现水平滑页翻页交互
+    https://www.zhangxinxu.com/wordpress/2017/02/css3-multiple-column-layout-read-horizontal/
+59. **_基于 CSS color 属性的静态 UI 组件重构策
+    略_**https://www.zhangxinxu.com/wordpress/2016/11/development-ui-component-based-on-css-color/
+60. @font-face { font-family: YH; src: local("microsoft yahei"),local("Microsoft Yahei");},.demo{font-family: YH} 简化
+    css 字体调用，unicode-range 指定部分特殊字符使用不同的字体
+    。https://www.zhangxinxu.com/wordpress/2016/11/css-unicode-range-character-font-face/
+61. form 表单中 fieldset 表示组，legend 表示组的标题，还能实现特殊布
+    局https://www.zhangxinxu.com/wordpress/2016/11/html-fieldset-legend-element-css-layout/
+62. 基于类名进行 js css 交互。常用交互控制类 active, disabled, checked, selected,.on,.in,.out
+63. 巧用浏览器 CSS 属性值的不兼容向下兼容 hack 技巧
+    https://www.zhangxinxu.com/wordpress/2016/10/browser-css-property-down-compatible-hack-technology/
+64. 金额前的货币符号不同颜色大小和间距的实现方案：::first-letter
+65. 基于 vw 的响应式布局
+
+    ```
+    html {
+        font-size: 16px;
+    }
+
+    @media screen and (min-width: 375px) {
+        html {
+            /* iPhone6的375px尺寸作为16px基准，414px正好18px大小, 600 20px */
+            font-size: calc(100% + 2 * (100vw - 375px) / 39);
+            font-size: calc(16px + 2 * (100vw - 375px) / 39);
+        }
+    }
+    @media screen and (min-width: 414px) {
+        html {
+            /* 414px-1000px每100像素宽字体增加1px(18px-22px) */
+            font-size: calc(112.5% + 4 * (100vw - 414px) / 586);
+            font-size: calc(18px + 4 * (100vw - 414px) / 586);
+        }
+    }
+    @media screen and (min-width: 600px) {
+        html {
+            /* 600px-1000px每100像素宽字体增加1px(20px-24px) */
+            font-size: calc(125% + 4 * (100vw - 600px) / 400);
+            font-size: calc(20px + 4 * (100vw - 600px) / 400);
+        }
+    }
+    @media screen and (min-width: 1000px) {
+        html {
+            /* 1000px往后是每100像素0.5px增加 */
+            font-size: calc(137.5% + 6 * (100vw - 1000px) / 1000);
+            font-size: calc(22px + 6 * (100vw - 1000px) / 1000);
+        }
+    }
+
+    ```
+
+66. appearence 加强 ui 表现，比如 a 标签用作按钮时：appearence:button
+67. 伪元素表单控件默认样式重置与自定义大全
+    https://www.zhangxinxu.com/wordpress/2013/06/%e4%bc%aa%e5%85%83%e7%b4%a0-%e8%a1%a8%e5%8d%95%e6%a0%b7%e5%bc%8f-pseudo-elements-style-form-controls/
+68. 通过获取 gpu 来更准确判断设备型号 https://segmentfault.com/a/1190000010157682
