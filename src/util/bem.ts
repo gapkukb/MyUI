@@ -10,13 +10,11 @@ export class BEM {
   private filter(i: any) {
     return type.string(i) && i.length;
   }
-  private map(i: any) {
+  private map = (i: any) => {
     return this.block + mod + i;
-  }
+  };
   classes(...params: InputClass): string {
-    params.filter(this.filter).map(this.map);
-    params.unshift(this.block);
-    return params.join(" ");
+    return [this.block, ...params.filter(this.filter).map(this.map)].join(" ");
   }
   child(name: string) {
     return this.block + ele + name;

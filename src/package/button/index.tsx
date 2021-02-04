@@ -1,3 +1,4 @@
+import "./index.styl";
 import { AnchorHTMLAttributes, ButtonHTMLAttributes, CSSProperties, FC, ReactNode } from "react";
 import { BEM } from "../../util/bem";
 const bem = new BEM("button");
@@ -43,17 +44,15 @@ export const Button: FC<Props> = (props) => {
     ...rest
   } = props;
   const classes = bem.classes(type, size, disabled && "disabled");
-  console.log(classes);
-
   const Tag = to ? "link" : href ? "a" : "button";
 
   return (
     <Tag className={classes} role="button">
-      <span className={bem.child("text")}>123213</span>
-      {/* <img src="https://github.com/logaretm/vee-validate/raw/main/logo.png" alt="this is message" /> */}
+      <span>123213</span>
     </Tag>
   );
 };
+
 Button.defaultProps = {
   type: "default",
   nativeType: "button",
