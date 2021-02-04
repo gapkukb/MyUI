@@ -1,33 +1,29 @@
 import { namespace, mod, ele } from "../json/name.json";
+import { type } from "./type";
+
 type InputClass = (string | undefined | boolean)[];
 export class BEM {
   block!: string;
-  constructor(componentName: string) {
-    this.block = componentName.startsWith(this.block) ? componentName : namespace + componentName;
+  constructor(block: string) {
+    this.block = block.startsWith(this.block) ? block : namespace + block;
   }
-  private filter(i) {
-    return i;
+  private filter(i: any) {
+    return type.string(i) && i.length;
   }
-  private em(classes: InputClass, symbol: string): string {
-    return classes
-      .filter((i) => i)
-      .map((i) => this.block + symbol + i)
-      .join(" ");
+  private map(i: any) {
+    return this.block + mod + i;
   }
-  mod(...classes: InputClass): string {
-    return this.em(classes, mod);
+  classes(...params: InputClass): string {
+    params.filter(this.filter).map(this.map);
+    params.unshift(this.block);
+    return params.join(" ");
   }
-
-  ele(...classes: InputClass): string {
-    return this.em(classes, ele);
-  }
-  static(...classes: InputClass): string {
-    return classes.filter((i) => i).join(" ");
+  child(name: string) {
+    return this.block + ele + name;
   }
   extend(name: string) {
-    return new BEM(this.block + ele + name);
+    return new BEM(this.child(name));
   }
-
   displayName(component: any): void {
     component.displayName = this.block;
   }
