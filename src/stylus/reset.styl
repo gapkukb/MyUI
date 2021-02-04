@@ -1,0 +1,110 @@
+*
+  box-sizing border-box
+  margin 0
+  padding 0
+
+html
+  font-size 14px
+  -webkit-text-size-adjust 100% /* 2 */
+  -ms-text-size-adjust 100% /* 2 */
+  -webkit-touch-callout none
+  -webkit-tap-highlight-color transparent
+  -webkit-overflow-scrolling touch
+
+a
+  color inherit
+  text-decoration none
+
+table
+  border-spacing 0
+  border-collapse collapse
+
+blockquote
+q
+  quotes none
+
+ol
+ul
+  list-style none
+
+:focus
+  outline 0
+
+img
+  max-width 100%
+  border 0 /* 1 */
+  vertical-align middle
+  -ms-interpolation-mode bicubic /* 2 */
+
+/**
+ * Prevent modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS 5 devices.
+ */
+audio:not([controls])
+  display none
+  height 0
+
+[hidden]
+template
+  display none !important
+
+:disabled
+[disabled]
+.disabled
+  cursor not-allowed
+
+[disabled]:not(:disabled)
+.disabled:not(:disabled)
+  pointer-events none
+
+button
+input[type=button]
+input[type=reset]
+input[type=submit]
+  overflow visible
+  width auto
+  border 1px solid
+  border-radius 0
+  background none
+  color inherit
+  vertical-align baseline
+  text-align center
+  text-transform none
+  white-space nowrap
+  font inherit
+  line-height normal
+  cursor pointer
+  appearance button
+  -webkit-font-smoothing inherit
+  -moz-osx-font-smoothing inherit
+
+input
+  border none
+  vertical-align baseline /* 3 */
+  font inherit
+  appearance none
+
+/**
+ * 1. Address box sizing set to content-box in IE 8/9.
+ * 2. Remove excess padding in IE 8/9.
+ * 3. Remove excess padding in IE 7.
+ *    Known issue: excess padding remains in IE 6.
+ */
+input[type="checkbox"]
+input[type="radio"]
+  box-sizing border-box /* 1 */
+  padding 0 /* 2 */
+  *width 13px /* 3 */
+  *height 13px /* 3 */
+
+input[type=search]::-webkit-search-cancel-button
+input[type=search]::-webkit-search-decoration
+input[type=search]::-webkit-search-results-button
+input[type=search]::-webkit-search-results-decoration
+  -webkit-appearance none
+  -moz-appearance none
+
+textarea
+  overflow auto
+  vertical-align top
+  resize vertical

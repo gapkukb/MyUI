@@ -47,7 +47,7 @@ export const Button: FC<Props> = (props) => {
   const Tag = to ? "link" : href ? "a" : "button";
 
   return (
-    <Tag className={classes} role="button">
+    <Tag className={classes} role="button" style={style}>
       <span>123213</span>
     </Tag>
   );
