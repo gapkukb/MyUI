@@ -1,0 +1,30 @@
+.my-icon
+  position relative
+  text-rendering auto
+
+  &__img
+    display block
+    width 1em
+    height 1em
+    object-fit contain
+
+  &__badge
+    position absolute
+    top 0
+    right 0
+    padding 0 3px
+    min-width 16px
+    border-radius 99px
+    background-color red
+    color #fff
+    text-align center
+    font-weight normal
+    font-size 12px
+    line-height 16px
+    transform translate( 50%, -50% )
+    transform-origin 100%
+
+    &:empty
+      min-width auto
+      width 0.7em
+      height 0.7em

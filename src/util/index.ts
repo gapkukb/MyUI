@@ -1,5 +1,5 @@
 import { type } from "./type";
-
+export function noop() {}
 export function getLength(x: Iterable<any>): number {
   if (type.string(x) || type.arrayLike(x)) return x.length;
   if (type.set(x) || type.map(x)) return x.size;
@@ -31,18 +31,3 @@ export const randomNumber = (min: number = Number.MIN_SAFE_INTEGER, max: number 
   Math.random() * (max - min) + min;
 /** 指定范围的随机整数 */
 export const randomInt = (max: number) => randomNumber(0, max);
-
-let arr = [];
-
-for (let i = 0; i < 100000; i++) {
-  arr.push(btoa(Math.random().toString(32).slice(1)).slice(0, 8));
-}
-var count = 0;
-
-for (let i = 0; i < 100000; i++) {
-  for (let j = 0; j < 100000; j++) {
-    if (arr[i] === arr[j]) count++;
-  }
-}
-
-console.log(count);

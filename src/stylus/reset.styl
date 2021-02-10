@@ -49,34 +49,11 @@ template
   display none !important
 
 :disabled
-[disabled]
 .disabled
   cursor not-allowed
 
-[disabled]:not(:disabled)
 .disabled:not(:disabled)
   pointer-events none
-
-button
-input[type=button]
-input[type=reset]
-input[type=submit]
-  overflow visible
-  width auto
-  border 1px solid
-  border-radius 0
-  background none
-  color inherit
-  vertical-align baseline
-  text-align center
-  text-transform none
-  white-space nowrap
-  font inherit
-  line-height normal
-  cursor pointer
-  appearance button
-  -webkit-font-smoothing inherit
-  -moz-osx-font-smoothing inherit
 
 input
   border none

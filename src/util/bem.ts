@@ -1,5 +1,6 @@
 import { namespace, mod, ele } from "../json/name.json";
 import { type } from "./type";
+export { default as classnames } from "classnames";
 
 type InputClass = (string | undefined | boolean)[];
 export class BEM {
@@ -18,6 +19,9 @@ export class BEM {
   }
   child(name: string) {
     return this.block + ele + name;
+  }
+  static(...params: InputClass) {
+    return this.block + ele;
   }
   extend(name: string) {
     return new BEM(this.child(name));
