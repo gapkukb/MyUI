@@ -1,7 +1,7 @@
 import { fixUnit } from "../../util/unit";
 import "./index.styl";
 
-export type ProgressProps = Partial<{
+export type FlexProps = Partial<{
   type: "line" | "circle" | "dashborad";
   max: Numeric;
   width: Numeric;
@@ -12,10 +12,8 @@ export type ProgressProps = Partial<{
   color: string;
   bgcolor: string;
   textColor: string;
-  radius: Numeric;
-  formatter: (current: Numeric) => string;
 }>;
-export function Progress({
+export function Flex({
   type = "line",
   max = 100,
   width = 100,
@@ -26,9 +24,7 @@ export function Progress({
   color = "blue",
   bgcolor = "lightGray",
   textColor = "#fff",
-  formatter = (value) => value + "%",
-  radius = Number(height) / 2,
-}: ProgressProps): JSX.Element {
+}: FlexProps): JSX.Element {
   const style = {
     width: fixUnit(width),
     height: fixUnit(height),
@@ -38,11 +34,11 @@ export function Progress({
 
   if (type === "line")
     return (
-      <svg width={width} height={width} viewBox={`0 0 ${width} ${height}`}>
-        <rect x="0" y="0" rx={radius} ry={radius} width={width} height="100%" fill={bgcolor} />
-        <rect x="0" y="0" rx={radius} ry={radius} width={value} height="100%" fill={color} />
-        <text fontSize={fontSize} fill={textColor} x="50%" y="50%" dominantBaseline="central" textAnchor="middle">
-          {formatter(value)}
+      <svg width={width} height={width} viewBox="0 0 100 20">
+        <rect x="0" y="0" rx="10" ry="10" width="100" height="20" fill="lightGray" />
+        <rect x="0" y="0" rx="10" ry="10" width="80" height="20" fill="blue" />
+        <text fontSize={fontSize} fill={textColor} x="50" y="10" dominantBaseline="central" textAnchor="middle">
+          123%
         </text>
       </svg>
     );
@@ -72,4 +68,4 @@ export function Progress({
   );
 }
 
-export default Progress;
+export default Flex;
