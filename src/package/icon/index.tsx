@@ -3,7 +3,6 @@ import { BEM, classnames } from "../../util/bem";
 import { fixUnit } from "../../util/unit";
 import "../../fontawesome/all.min.css";
 import "./index.styl";
-const bem = new BEM("icon");
 
 export type IconProps = Partial<{
   family: string;
@@ -31,10 +30,10 @@ export function Icon({
   ...props
 }: IconProps): JSX.Element {
   const isImg = name.includes(".");
-  const Tag = tag;
+  const Tag = tag as any;
   const attrs = {
     ...props,
-    className: classnames("my-icon", family, prefix + name, className, {
+    className: classnames("icon", family, prefix + name, className, {
       fab: brand,
     }),
     style: {
@@ -45,11 +44,10 @@ export function Icon({
 
   return (
     <Tag {...attrs} aria-hidden="true">
-      {isImg && <img className={bem.child("img")} src={name} alt="" />}
-      {badge && <b className={bem.child("badge")}>{badge}</b>}
+      {isImg && <img className="icon__img" src={name} alt="" />}
+      {badge && <b className="icon__badge">{badge}</b>}
     </Tag>
   );
 }
 
-bem.displayName(Icon);
 export default Icon;

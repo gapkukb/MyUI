@@ -58,5 +58,19 @@
     "blue-gray": "#546E7A",
     "white": "#ffffff",
     "black": "#000000"
+  },
+  "spacing": {
+    "xs": "8px",
+    "sm": "16px",
+    "md": "24px",
+    "lg": "32px",
+    "xl": "40px"
+  },
+  "breakpoint": {
+    "xs": "0px",
+    "sm": "567.98px",
+    "md": "1023.98px",
+    "lg": "1399.98px",
+    "xl": "1919.98px"
   }
 }

@@ -1,11 +1,28 @@
 import React from "react";
-import { Progress } from "./package/progress";
+import Grid from "./package/box/grid";
+import Cell from "./package/box/cell";
 
 function App() {
   return (
     <>
-      <Progress value="50" bgcolor="red"></Progress>
-      <Progress value="50" type="circle"></Progress>
+      <Grid className="grid--4" gap="sm" padding="lg">
+        {Array(10)
+          .fill(0)
+          .map((_, i) => (
+            <Cell key={i} className="item1">
+              1
+            </Cell>
+          ))}
+      </Grid>
+      <Grid gap={["lg", "xs"]} padding={["lg", "xs"]}>
+        {Array(80)
+          .fill(0)
+          .map((_, i) => (
+            <Cell key={i} className="item1">
+              1
+            </Cell>
+          ))}
+      </Grid>
     </>
   );
 }

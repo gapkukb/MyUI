@@ -1,0 +1,40 @@
+$vars = json( "../../json/vars.json", { hash: true } )
+$spacing = $vars.spacing
+$breakpoint = $vars.breakpoint
+
+.grid
+  display grid
+
+for $key in 1 .. 24
+  .grid--{$key}
+    grid-template-columns repeat( $key, 1fr )
+
+for $key, $value in $spacing
+  .gap--{$key}
+    gap $value
+
+  .pad--{$key}
+    padding $value
+
+for $row, $rowValue in $spacing
+  for $col, $colValue in $spacing
+    .gap--{$row}-{$col}
+      gap $rowValue $colValue
+
+    .pad--{$row}-{$col}
+      padding $rowValue $colValue
+
+for $key, $value in $breakpoint
+  @media ( min-width $value )
+    body:after
+      display none
+      content $key
+
+.cell
+  background-color red
+
+  &.square:before
+    display inline-flex
+    padding-bottom 100%
+    width 0
+    content ""

@@ -1,1 +1,0 @@
-type Numeric = string | number;
