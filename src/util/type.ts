@@ -15,7 +15,7 @@ export const type = {
   boolean: (x: any): x is boolean => call(x) === "Boolean",
   array: <T = any>(x: any): x is Array<T> => Array.isArray(x),
   arrayLike: <T = any>(x: any): x is ArrayLike<T> => typeof x === "object" && type.number(x.length),
-  object: (x: any): x is Record<string, any> => call(x) === "Object",
+  object: (x: any): x is { [key: string]: any } => call(x) === "Object",
   set: <T = any>(x: any): x is Set<T> => call(x) === "Set",
   map: <K = any, V = any>(x: any): x is Map<K, V> => call(x) === "Map",
   date: (x: any): x is Date => call(x) === "Date",
