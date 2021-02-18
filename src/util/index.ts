@@ -1,5 +1,5 @@
 import { type } from "./type";
-export function noop() {}
+export const noop: any = function () {};
 export function getLength(x: Iterable<any>): number {
   if (type.string(x) || type.arrayLike(x)) return x.length;
   if (type.set(x) || type.map(x)) return x.size;

@@ -9,10 +9,18 @@ type SpacingIntersect = Spacings | { [key in Spacing]?: Spacings };
 export type CarouselItemProps = Partial<{
   /* 添加类名 */
   className: string;
+  active: number;
+  selfIndex: number;
+  duplicate: boolean;
 }>;
 
-export const CarouselItem: FC<CarouselItemProps> = ({ className, children }) => {
-  const classes = classnames("carousel__item");
+export const CarouselItem: FC<CarouselItemProps> = ({ active = 0, selfIndex, duplicate, className, children }) => {
+  const classes = classnames("carousel__item", "carousel__item--" + selfIndex, {
+    "carousel__item--prev": selfIndex === active - 1,
+    "carousel__item--active": selfIndex === active,
+    "carousel__item--next": selfIndex === active + 1,
+    "carousel__item--duplicate": duplicate,
+  });
   return <div className={classes}>{children}</div>;
 };
 
