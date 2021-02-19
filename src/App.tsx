@@ -7,7 +7,7 @@ function App() {
   return (
     <>
       <Carousel height="300">
-        <CarouselItem>1</CarouselItem>
+        <CarouselItem href="">1</CarouselItem>
         <CarouselItem>2</CarouselItem>
         {/* <CarouselItem>3</CarouselItem> */}
         {/* <CarouselItem>4</CarouselItem> */}

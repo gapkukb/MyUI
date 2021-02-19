@@ -7,9 +7,9 @@ export type CarouselProps = Partial<{
   /* 添加类名 */
   className: string;
   /* 容器宽度 */
-  width: CssValue<LengthUnit>;
+  width: CssLengthValue;
   /* 容器高度 */
-  height: CssValue<LengthUnit>;
+  height: CssLengthValue;
   /* 动画时间 */
   duration: Numeric;
   /* 轮播间隔时间 */
@@ -57,7 +57,7 @@ export type CarouselProps = Partial<{
   /* 元素间隔 */
   gap: Numeric;
   /* 可视个数 */
-  cols: Numeric;
+  cols: Numeric|"auto";
   /* 鼠标移入暂停自动播放 */
   stopByHover: boolean;
   /* 跳转到指定页码 */

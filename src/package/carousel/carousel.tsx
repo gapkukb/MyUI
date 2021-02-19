@@ -11,11 +11,8 @@ import {
 } from "react";
 import { fixUnit } from "../../util/unit";
 import { CarouselItem } from "./carousel-item";
-import { classnames } from "../../util/bem";
 import { CarouselProps } from ".";
-
-type Spacings = Spacing | Template<Spacing, Spacing>;
-type SpacingIntersect = Spacings | { [key in Spacing]?: Spacings };
+import { classnames } from "../../util/bem";
 
 export const Carousel: FC<CarouselProps> = ({
   width,
@@ -26,7 +23,7 @@ export const Carousel: FC<CarouselProps> = ({
   autoplay = true,
   loopable = true,
   interval = 4000,
-  draggable = true,
+  panable = true,
   indicatory,
   indicatorByHover,
   frame = 24,
@@ -36,12 +33,12 @@ export const Carousel: FC<CarouselProps> = ({
   className,
   style,
   children,
-}: CarouselProps) => {
+}) => {
   /* variables */
   const track = useRef<HTMLDivElement>(null);
   const outer = useRef<HTMLDivElement>(null);
   const count = Children.count(children);
-
+  interval = Number(interval)
   const throttle = 1000 / Number(frame);
   const avalidWidth = outer.current?.offsetWidth as number;
 
@@ -50,7 +47,6 @@ export const Carousel: FC<CarouselProps> = ({
   let pressed = false;
   let lastTimestamp = Date.now();
   let lastPageX = 0;
-  console.log(avalidWidth);
 
   const enctype: ReactNode[] = Children.toArray(children).map((child: any, index) => {
     if (child.type && child.type.name === CarouselItem.name) {
@@ -60,7 +56,9 @@ export const Carousel: FC<CarouselProps> = ({
     }
     return null;
   });
-
+  useLayoutEffect(function () {
+    console.log(outer.current!.offsetWidth);
+  });
   if (loopable && count > 1) {
     // let last: any = enctype[count - 1];
     // enctype.push(cloneElement(enctype[0] as any, { key: -1, duplicate: true }));
@@ -114,9 +112,7 @@ export const Carousel: FC<CarouselProps> = ({
     setActive(active + 1);
   }
   useEffect(translate, [active]);
-  useLayoutEffect(function () {
-    console.log(outer.current!.offsetWidth);
-  });
+
   /* props */
   const outerProps = {
     className: classnames("carousel"),
@@ -159,15 +155,15 @@ export const Carousel: FC<CarouselProps> = ({
   return (
     <div aria-live="polite" {...outerProps}>
       <div {...trackProps}>{enctype}</div>
-      <ul className="carousel__indicator">
+      <ol className="carousel__indicator">
         {new Array(count).fill(0).map((_, index) => (
           <li {...indicatorProps(index)}></li>
         ))}
-      </ul>
+      </ol>
       {navigable && <button {...prevProps}></button>}
       {navigable && <button {...nextProps}></button>}
     </div>
   );
 };
-
+Carousel.displayName = Carousel.name
 export default Carousel;

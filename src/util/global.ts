@@ -19,7 +19,7 @@ declare global {
     | "pc"
     | "%";
 
-  type CssValue<Unit extends string> = Numeric | `${number}${Unit}`;
+  type CssLengthValue = Numeric | `${number}${LengthUnit}`;
   type Numeric = `${number}` | number;
   type Spacing = keyof typeof _spacing;
   type Template<M extends string, N extends string> = `${M}-${N}`;
