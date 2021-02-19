@@ -15,14 +15,25 @@ export type CarouselItemProps = Partial<{
   duplicate: boolean;
 }>;
 
-export const CarouselItem: FC<CarouselItemProps> = ({ active = 0, selfIndex, total,duplicate, className, children }) => {
+export const CarouselItem: FC<CarouselItemProps> = ({
+  active = 0,
+  selfIndex,
+  total,
+  duplicate,
+  className,
+  children,
+}) => {
   const classes = classnames("carousel__item", "carousel__item--" + selfIndex, {
     "carousel__item--prev": selfIndex === active - 1,
     "carousel__item--active": selfIndex === active,
     "carousel__item--next": selfIndex === active + 1,
     "carousel__item--duplicate": duplicate,
   });
-  return <div className={classes} role="group" aria-label={`${selfIndex}/${total}`}>{children}</div>;
+  return (
+    <div className={classes} role="group" aria-label={`${selfIndex}/${total}`}>
+      {children}
+    </div>
+  );
 };
-
+CarouselItem.displayName = CarouselItem.name;
 export default CarouselItem;

@@ -1,87 +1,78 @@
 import {
   Children,
   cloneElement,
-  DOMAttributes,
   FC,
-  HTMLAttributes,
-  ReactElement,
   ReactNode,
   TransitionEvent,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
-import { filterByComponentName } from "../../util/element";
 import { fixUnit } from "../../util/unit";
 import { CarouselItem } from "./carousel-item";
 import { classnames } from "../../util/bem";
-import { type } from "../../util/type";
-import { noop } from "../../util";
+import { CarouselProps } from ".";
 
 type Spacings = Spacing | Template<Spacing, Spacing>;
 type SpacingIntersect = Spacings | { [key in Spacing]?: Spacings };
-
-export type CarouselProps = Partial<{
-  /* 添加类名 */
-  className: string;
-  /* 容器宽度 */
-  width: Numeric;
-  /* 容器高度 */
-  height: Numeric;
-  /* 动画时间 */
-  duration: Numeric;
-  /* 轮播间隔时间 */
-  intervall: Numeric;
-  /* 是否自动播放 */
-  autoplay: boolean;
-  /* 是否无缝切换 */
-  loopable: boolean;
-  /* 指示器类名，会替换掉组件内置的类名，样式将完全由传入的类名控制 */
-  indicatorClassName: string;
-  /* 指示器类名，会替换掉组件内置的类名，样式将完全由传入的类名控制 */
-  indicatorTrigger: "hover";
-  /* 开启/关闭步进器 */
-  ctrlable: boolean;
-  /* 开始位置 */
-  selectedIndex: Numeric;
-  /* drag节流时间 */
-  frame: Numeric;
-}> &
-  HTMLAttributes<HTMLDivElement>;
 
 export const Carousel: FC<CarouselProps> = ({
   width,
   height,
   duration = 500,
-  ctrlable: ctrl = true,
-  selectedIndex = 0,
+  navigable = true,
+  active: _active = 0,
   autoplay = true,
   loopable = true,
-  intervall = 4000,
+  interval = 4000,
   draggable = true,
-  indicatorClassName,
-  indicatorTrigger,
+  indicatory,
+  indicatorByHover,
   frame = 24,
+  gap,
+  cols = 1,
+  stopByHover = true,
   className,
   style,
   children,
-}) => {
+}: CarouselProps) => {
+  /* variables */
   const track = useRef<HTMLDivElement>(null);
   const outer = useRef<HTMLDivElement>(null);
-  const count = Children.count(children)
-  let [active, setActive] = useState(Number(selectedIndex));
+  const count = Children.count(children);
+
+  const throttle = 1000 / Number(frame);
+  const avalidWidth = outer.current?.offsetWidth as number;
+
+  let [active, setActive] = useState(Number(_active));
   let [silent, setSilent] = useState(false);
   let pressed = false;
   let lastTimestamp = Date.now();
-  let lastPageX = 0
-  const throttle = 1000 / Number(frame);
+  let lastPageX = 0;
+  console.log(avalidWidth);
 
-  let dragHandle = function (e: PointerEvent) {
+  const enctype: ReactNode[] = Children.toArray(children).map((child: any, index) => {
+    if (child.type && child.type.name === CarouselItem.name) {
+      console.log(avalidWidth);
+
+      return cloneElement(child, { active, index, total: count, gap, cols, avalidWidth });
+    }
+    return null;
+  });
+
+  if (loopable && count > 1) {
+    // let last: any = enctype[count - 1];
+    // enctype.push(cloneElement(enctype[0] as any, { key: -1, duplicate: true }));
+    // enctype.unshift(cloneElement(last, { key: -2, duplicate: true }));
+  }
+  /* handlers */
+  function dragHandle(e: PointerEvent) {
     switch (e.type) {
       case "pointerdown":
         pressed = true;
-        lastPageX = e.pageX
-        track.current!.style.transitionDuration="0ms"
+        lastPageX = e.pageX;
+        track.current!.style.transitionDuration = "0ms";
         break;
       case "pointermove":
         let now = Date.now();
@@ -92,71 +83,72 @@ export const Carousel: FC<CarouselProps> = ({
         break;
       default:
         pressed = false;
-        track.current!.style.transitionDuration=fixUnit(duration, "ms")
+        track.current!.style.transitionDuration = fixUnit(duration, "ms");
     }
-  };
-  function complete(e:TransitionEvent) {
-    if(active === -1) {
-      setSilent(true)
-      active = count - 1
-    }else if(active === count - 1){
-      setSilent(true)
-      active = 0
-    }else{
-      setSilent(false)
+  }
+  function complete(e: TransitionEvent) {
+    if (active === -1) {
+      setSilent(true);
+      active = count - 1;
+    } else if (active === count) {
+      setSilent(true);
+      active = 0;
+    } else {
+      setSilent(false);
     }
     console.log(`animated done`);
   }
-  children = Children.map(children, (child: any, index) => {
-    if (child.type && child.type.name === CarouselItem.name) return cloneElement(child, { active, selfIndex: index,total:count });
-    return null;
-  });
-
-  const enctype = Children.toArray(children);
-  const avalidWidth = outer.current?.offsetWidth as number;
-
-  const translate = () => {
-    track.current!.style.cssText = `transition-duration:${fixUnit(silent?0:duration, "ms")};transform:translate3d(-${
-      avalidWidth * active
-    }px, 0, 0)`;
-  };
-
-  useEffect(translate, [active]);
-
-  if (loopable) {
-    let last = enctype[enctype.length - 1] as any;
-    enctype.push(cloneElement(enctype[0] as any, { key: -1, duplicate: true }));
-    enctype.unshift(cloneElement(last, { key: -2, duplicate: true }));
+  function translate() {
+    track.current!.style.cssText = `transition-duration:${fixUnit(
+      silent ? 0 : duration,
+      "ms"
+    )};transform:translate3d(-${avalidWidth * active}px, 0, 0)`;
   }
-    
   function dotHandle(e: any) {
-    setActive(Number((e.target as HTMLLIElement).dataset.index))
-  };
-  function prevHandle(){
-    active++
-    setActive(loopable?active % count:Math.max(Math.min(active,count - 1),0))
-  };
-  function nextHandle(){
-    active++
-    setActive(loopable?active % count:Math.max(Math.min(active,count - 1),0))
-  };
-  const classes = classnames("carousel");
-  const _style = {
-    width: fixUnit(width),
-    height: fixUnit(height),
-  };
+    setActive(Number((e.target as HTMLLIElement).dataset.index));
+  }
+  function prevHandle() {
+    setActive(active - 1);
+  }
+  function nextHandle() {
+    setActive(active + 1);
+  }
+  useEffect(translate, [active]);
+  useLayoutEffect(function () {
+    console.log(outer.current!.offsetWidth);
+  });
+  /* props */
   const outerProps = {
-    className: classes,
-    style: _style,
+    className: classnames("carousel"),
+    style: {
+      width: fixUnit(width),
+      height: fixUnit(height),
+    },
     ref: outer,
   };
-
   const trackProps = {
-    className:"carousel__track",
-    ref:track,
-  }
+    className: "carousel__track",
+    ref: track,
+  };
+  const prevProps = {
+    className: "carousel__ctrl prev",
+    disabled: !loopable && active === 0,
+    onClick: prevHandle,
+  };
+  const nextProps = {
+    className: "carousel__ctrl next",
+    disabled: !loopable && active === count - 1,
+    onClick: nextHandle,
+  };
+  const indicatorProps = (index: number) => ({
+    "className": active === index ? "active" : undefined,
+    "data-index": index,
+    "key": index,
+    [indicatorByHover ? "onMouseEnter" : "onClick"]: dotHandle,
+  });
+
   // 如果无缝循环播放，那么需要处理收尾的边界情况
-  if(loopable) Object.assign(trackProps, {onTransitionEnd:complete})
+  if (loopable) Object.assign(trackProps, { onTransitionEnd: complete });
   // if (draggable)
   //   Object.assign(outerProps, {
   //     onPointerDown: dragHandle,
@@ -164,19 +156,16 @@ export const Carousel: FC<CarouselProps> = ({
   //     onPointerUp: dragHandle,
   //     onPointerCancel: dragHandle,
   //   });
-  const indicatorEvent = {
-    [indicatorTrigger === "hover"?"onMouseEnter":"onClick"]:dotHandle
-  }
   return (
     <div aria-live="polite" {...outerProps}>
       <div {...trackProps}>{enctype}</div>
       <ul className="carousel__indicator">
         {new Array(count).fill(0).map((_, index) => (
-          <li className={active === index ? "active" : ""} data-index={index} key={index} {...indicatorEvent}></li>
+          <li {...indicatorProps(index)}></li>
         ))}
-      </ul> 
-      {ctrl && <button onClick={prevHandle} className="carousel__ctrl prev" disabled={!loopable&&active===0}></button>}
-      {ctrl && <button onClick={nextHandle} className="carousel__ctrl next" disabled={!loopable&&active===count-1}></button>}
+      </ul>
+      {navigable && <button {...prevProps}></button>}
+      {navigable && <button {...nextProps}></button>}
     </div>
   );
 };

@@ -1,17 +1,19 @@
-import React from "react";
-import { Carousel,CarouselItem  } from "./package/carousel";
+import React, { useRef } from "react";
+import { Carousel, CarouselItem } from "./package/carousel";
 
 function App() {
+  function goto(index: number) {}
+  const slider = useRef<HTMLDivElement>(null);
   return (
     <>
-      <Carousel width="800" height="300">
+      <Carousel height="300">
         <CarouselItem>1</CarouselItem>
         <CarouselItem>2</CarouselItem>
         {/* <CarouselItem>3</CarouselItem> */}
         {/* <CarouselItem>4</CarouselItem> */}
       </Carousel>
       <br />
-      <Carousel width="800" height="300" loopable={false} indicatorTrigger="hover">
+      <Carousel height="300" loopable={false} gap="20" indicatorByHover>
         <CarouselItem>1</CarouselItem>
         <CarouselItem>2</CarouselItem>
         <CarouselItem>3</CarouselItem>
