@@ -6,7 +6,7 @@ function App() {
   const slider = useRef<HTMLDivElement>(null);
   return (
     <>
-      <Carousel height="300">
+      <Carousel height="300" width="30%">
         <CarouselItem href="">1</CarouselItem>
         <CarouselItem>2</CarouselItem>
         {/* <CarouselItem>3</CarouselItem> */}

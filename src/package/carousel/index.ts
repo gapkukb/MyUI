@@ -56,10 +56,12 @@ export type CarouselProps = Partial<{
   frame: Numeric;
   /* 元素间隔 */
   gap: Numeric;
-  /* 可视个数 */
-  cols: Numeric|"auto";
+  /* 可视个数 默认1*/
+  views: Numeric | "auto";
+  /* 每次切换的个数 默认1,如果指定了views,则不得大于 views值 */
+  steps: Numeric;
   /* 鼠标移入暂停自动播放 */
-  stopByHover: boolean;
+  stopWhenHover: boolean;
   /* 跳转到指定页码 */
   goto: (index: number) => void;
   /* 动画执行前回调,返回false将取消切换 */

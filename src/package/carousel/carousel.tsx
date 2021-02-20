@@ -1,9 +1,11 @@
 import {
   Children,
   cloneElement,
+  createContext,
   FC,
   ReactNode,
   TransitionEvent,
+  useContext,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -13,6 +15,7 @@ import { fixUnit } from "../../util/unit";
 import { CarouselItem } from "./carousel-item";
 import { CarouselProps } from ".";
 import { classnames } from "../../util/bem";
+import Context from "./context";
 
 export const Carousel: FC<CarouselProps> = ({
   width,
@@ -22,14 +25,15 @@ export const Carousel: FC<CarouselProps> = ({
   active: _active = 0,
   autoplay = true,
   loopable = true,
-  interval = 4000,
+  interval: _interval = 4000,
   panable = true,
   indicatory,
   indicatorByHover,
   frame = 24,
   gap,
-  cols = 1,
-  stopByHover = true,
+  views = 1,
+  stopWhenHover = true,
+  vertical,
   className,
   style,
   children,
@@ -38,27 +42,25 @@ export const Carousel: FC<CarouselProps> = ({
   const track = useRef<HTMLDivElement>(null);
   const outer = useRef<HTMLDivElement>(null);
   const count = Children.count(children);
-  interval = Number(interval)
-  const throttle = 1000 / Number(frame);
-  const avalidWidth = outer.current?.offsetWidth as number;
+  const interval = +_interval;
+  const throttle = 1000 / +frame;
 
-  let [active, setActive] = useState(Number(_active));
+  let timer: any = 0;
+  let avalidWidth = 0;
+  let [active, setActive] = useState(+_active);
   let [silent, setSilent] = useState(false);
+  let [px, setPX] = useState({ width: 0, height: 0 });
+
+  let enctype = Children.toArray(children).map((child: any, index) => {
+    if (child.type && child.type.name === CarouselItem.name) {
+      return cloneElement(child, { active, index, total: count, gap, views, avalidWidth });
+    }
+    return null;
+  });
   let pressed = false;
   let lastTimestamp = Date.now();
   let lastPageX = 0;
 
-  const enctype: ReactNode[] = Children.toArray(children).map((child: any, index) => {
-    if (child.type && child.type.name === CarouselItem.name) {
-      console.log(avalidWidth);
-
-      return cloneElement(child, { active, index, total: count, gap, cols, avalidWidth });
-    }
-    return null;
-  });
-  useLayoutEffect(function () {
-    console.log(outer.current!.offsetWidth);
-  });
   if (loopable && count > 1) {
     // let last: any = enctype[count - 1];
     // enctype.push(cloneElement(enctype[0] as any, { key: -1, duplicate: true }));
@@ -111,15 +113,30 @@ export const Carousel: FC<CarouselProps> = ({
   function nextHandle() {
     setActive(active + 1);
   }
+  function pause() {
+    clearTimeout(timer);
+  }
+  function play() {
+    timer = setTimeout(() => {
+      setActive(active + 1);
+      play();
+    }, interval);
+  }
   useEffect(translate, [active]);
+  useEffect(function () {
+    setPX({ width: outer.current!.offsetWidth, height: outer.current!.offsetHeight });
+    play();
+  }, []);
 
   /* props */
   const outerProps = {
     className: classnames("carousel"),
     style: {
-      width: fixUnit(width),
-      height: fixUnit(height),
+      width: fixUnit(px.width || width),
+      height: fixUnit(px.height || height),
     },
+    onMouseEnter: pause,
+    onMouseLeave: play,
     ref: outer,
   };
   const trackProps = {
@@ -152,18 +169,21 @@ export const Carousel: FC<CarouselProps> = ({
   //     onPointerUp: dragHandle,
   //     onPointerCancel: dragHandle,
   //   });
+
   return (
-    <div aria-live="polite" {...outerProps}>
-      <div {...trackProps}>{enctype}</div>
-      <ol className="carousel__indicator">
-        {new Array(count).fill(0).map((_, index) => (
-          <li {...indicatorProps(index)}></li>
-        ))}
-      </ol>
-      {navigable && <button {...prevProps}></button>}
-      {navigable && <button {...nextProps}></button>}
-    </div>
+    <Context.Provider value={{ viewWidth: px.width }}>
+      <div aria-live="polite" {...outerProps}>
+        <div {...trackProps}>{enctype}</div>
+        <ol className="carousel__indicator">
+          {new Array(count).fill(0).map((_, index) => (
+            <li {...indicatorProps(index)}></li>
+          ))}
+        </ol>
+        {navigable && <button {...prevProps}></button>}
+        {navigable && <button {...nextProps}></button>}
+      </div>
+    </Context.Provider>
   );
 };
-Carousel.displayName = Carousel.name
+Carousel.displayName = Carousel.name;
 export default Carousel;
