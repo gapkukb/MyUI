@@ -1,26 +1,28 @@
 import React, { useRef } from "react";
-import { Carousel, CarouselItem } from "./package/carousel";
+import { Tab, Pane } from "./package/tab";
 
 function App() {
-  function goto(index: number) {}
-  const slider = useRef<HTMLDivElement>(null);
-  return (
-    <>
-      <Carousel height="300" width="30%">
-        <CarouselItem href="">1</CarouselItem>
-        <CarouselItem>2</CarouselItem>
-        {/* <CarouselItem>3</CarouselItem> */}
-        {/* <CarouselItem>4</CarouselItem> */}
-      </Carousel>
-      <br />
-      <Carousel height="300" loopable={false} gap="20" indicatorByHover>
-        <CarouselItem>1</CarouselItem>
-        <CarouselItem>2</CarouselItem>
-        <CarouselItem>3</CarouselItem>
-        <CarouselItem>4</CarouselItem>
-      </Carousel>
-    </>
-  );
+	return (
+		<>
+			<Tab active="1">
+				<Pane name="title1" id="1">
+					content1
+				</Pane>
+				<Pane name="title2" id="2">
+					content2
+				</Pane>
+				<Pane name="title3" id="3">
+					content3
+				</Pane>
+				<Pane name="title4" id="4">
+					content4
+				</Pane>
+				<Pane name="title5" id="5" disabled>
+					content5
+				</Pane>
+			</Tab>
+		</>
+	);
 }
 
 export default App;

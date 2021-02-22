@@ -1,10 +1,10 @@
-import React from "react"; 
+import React from "react";
 import { Checkbox } from "./index";
 
 export default {
-  title: "checkbox",
-  component: Checkbox,
+	title: "checkbox",
+	component: Checkbox,
 };
 export const Demo = () => {
-  return  <></>
+	return <></>;
 };
