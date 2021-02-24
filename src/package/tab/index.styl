@@ -1,16 +1,40 @@
 .tab
+    padding 8px
     &__header
         position relative
         display flex
-
-    &__name
-        padding 8px
-        cursor pointer
-
+        border-bottom 1px solid #ddd
+        user-select none
+        &--card > ^[0]__name
+            margin-right 8px
+            padding 8px 16px
+            border 1px solid #ddd
+            border-radius 4px 4px 0 0
+            background-color #ddd
+            cursor pointer
+            transition background 300ms
+            &:last-child
+                margin-right 0
+            &.active
+                margin-bottom -1px
+                border-bottom 0
+                background-color #fff
+            &.disabled
+                opacity .7
+        &--normal > ^[0]__name
+            padding 8px 16px
+            cursor pointer
+            &.disabled
+                opacity .7
     &__indicator
         position absolute
         bottom 0
         left 0
-        width 20px
-        height 2px
-        background-color red
+        width 40px
+        height 3px
+        background-color #ee0a24
+        transition transform 300ms
+
+    &__pane
+        &.inactive
+            display none

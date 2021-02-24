@@ -4,20 +4,56 @@ import { Tab, Pane } from "./package/tab";
 function App() {
 	return (
 		<>
-			<Tab active="1">
-				<Pane name="title1" id="1">
+			<Tab active="1" type="normal" data-pp="213" touchable>
+				<Pane label="title1" name="1">
 					content1
 				</Pane>
-				<Pane name="title2" id="2">
+				<Pane label="title2" name="2">
 					content2
 				</Pane>
-				<Pane name="title3" id="3">
+				<Pane label="title3title3title3" name="3">
 					content3
 				</Pane>
-				<Pane name="title4" id="4">
+				<Pane label="title4" name="4">
 					content4
 				</Pane>
-				<Pane name="title5" id="5" disabled>
+				<Pane label="title5" name="5" disabled>
+					content5
+				</Pane>
+			</Tab>
+
+            <Tab active="1" lazy type="card">
+				<Pane label="title1" name="1">
+					content1
+				</Pane>
+				<Pane label="title2" name="2">
+					content2
+				</Pane>
+				<Pane label="title3" name="3">
+					content3
+				</Pane>
+				<Pane label="title4" name="4">
+					content4
+				</Pane>
+				<Pane label="title5" name="5" disabled>
+					content5
+				</Pane>
+			</Tab>
+
+            <Tab active="1" type="button">
+				<Pane label="title1" name="1">
+					content1
+				</Pane>
+				<Pane label="title2" name="2">
+					content2
+				</Pane>
+				<Pane label="title3" name="3">
+					content3
+				</Pane>
+				<Pane label="title4" name="4">
+					content4
+				</Pane>
+				<Pane label="title5" name="5" disabled>
 					content5
 				</Pane>
 			</Tab>

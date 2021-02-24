@@ -1,0 +1,16 @@
+.tab__header {
+  position: relative;
+  display: flex;
+}
+.tab__name {
+  padding: 8px;
+  cursor: pointer;
+}
+.tab__indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 20px;
+  height: 2px;
+  background-color: #f00;
+}

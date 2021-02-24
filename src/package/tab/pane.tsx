@@ -1,26 +1,16 @@
 import { FC, CSSProperties } from "react";
 import classnames from "classnames";
-export type PaneProps = Partial<{
-	className: string;
-	style: CSSProperties;
-	id: string | number;
-	name: string;
-	disabled: boolean;
-}>;
+import { PanePrivateProps, PaneProps } from "./types";
 
-export const Pane: FC<PaneProps> = ({ className, style, name, id, disabled, children, ...rest }) => {
-	console.log(disabled);
-
+export const Pane: FC<PaneProps & PanePrivateProps> = ({ className, style,label,name,active = true, disabled, children, ...rest }) => {
 	function clickHandler() {}
 	const props = {
-		className: classnames("pane", {
-			disabled,
+		className: classnames("tab__pane", {
+            inactive:!active,
+            disabled,
 		}),
-		style: {
-			...style,
-		},
-		onClick: clickHandler,
-		...rest,
+		style,
+		...rest, 
 	};
 	return <div {...props}>{children}</div>;
 };
