@@ -2,9 +2,9 @@ import { CSSProperties, ReactNode } from "react";
 
 export type TabProps = Partial<{
 	className: string;
-    /* tab body额外类名 */
-    bodyClassName: string;
-    /* tab 头部额外类名 */
+	/* tab body额外类名 */
+	bodyClassName: string;
+	/* tab 头部额外类名 */
 	headerClassName: string;
 	style: CSSProperties;
 	/* 是否异步渲染 */
@@ -26,13 +26,15 @@ export type TabProps = Partial<{
 	/* 自定义动画名称 */
 	animationName: string;
 	/* 禁用整个tab */
-    disabled: boolean;
-    /* 底部插槽 */
-    footer:ReactNode
-    /* 滑动切换 */
-    touchable:boolean
-    /* 切换的速率阈值 默认0.5 */
-    velocity:Numeric
+	disabled: boolean;
+	/* 底部插槽 */
+	footer: ReactNode;
+	/* 滑动切换 */
+	touchable: boolean;
+	/* 切换的速率阈值 默认0.5 */
+	velocity: Numeric;
+	/* 动画时间 默认300ms*/
+	duration: Numeric;
 }>;
 
 export type PaneProps = Partial<{

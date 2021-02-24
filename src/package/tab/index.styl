@@ -1,10 +1,13 @@
 .tab
     padding 8px
+
     &__header
         position relative
         display flex
         border-bottom 1px solid #ddd
         user-select none
+        touch-action none
+
         &--card > ^[0]__name
             margin-right 8px
             padding 8px 16px
@@ -13,19 +16,25 @@
             background-color #ddd
             cursor pointer
             transition background 300ms
+
             &:last-child
                 margin-right 0
+
             &.active
                 margin-bottom -1px
                 border-bottom 0
                 background-color #fff
+
             &.disabled
-                opacity .7
+                opacity 0.7
+
         &--normal > ^[0]__name
             padding 8px 16px
             cursor pointer
+
             &.disabled
-                opacity .7
+                opacity 0.7
+
     &__indicator
         position absolute
         bottom 0
