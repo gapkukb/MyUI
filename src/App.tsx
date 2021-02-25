@@ -1,74 +1,16 @@
-import React, { useRef } from "react";
-import { Tab, Pane } from "./package/tab";
+import React, { useRef, useState } from "react";
+import { Img } from "./package/image";
 
 function App() {
+	const [state, setState] = useState<string | undefined>(undefined);
+	setTimeout(() => {
+		setState("http://10.11.16.103:8001/group1/M00/02/0E/CgsQZ158PSCAE0xMAAKtO6uN3h4833.jpg");
+	}, 3000);
+
 	return (
 		<>
-			<Tab active="1" type="normal" data-pp="213" touchable>
-				<Pane label="title1" name="1">
-					content1
-				</Pane>
-				<Pane label="title2" name="2">
-					content2
-				</Pane>
-				<Pane label="title3title3title3" name="3">
-					content3
-				</Pane>
-				<Pane label="title4" name="4">
-					content4
-				</Pane>
-				<Pane label="title5" name="5" disabled>
-					content5
-				</Pane>
-				<Pane label="title5" name="6" disabled>
-					content5
-				</Pane>
-				<Pane label="title5" name="7" disabled>
-					content5
-				</Pane>
-				<Pane label="title5" name="8" disabled>
-					content5
-				</Pane>
-				<Pane label="title5" name="9" disabled>
-					content5
-				</Pane>
-			</Tab>
-
-			<Tab active="1" lazy type="card">
-				<Pane label="title1" name="1">
-					content1
-				</Pane>
-				<Pane label="title2" name="2">
-					content2
-				</Pane>
-				<Pane label="title3" name="3">
-					content3
-				</Pane>
-				<Pane label="title4" name="4">
-					content4
-				</Pane>
-				<Pane label="title5" name="5" disabled>
-					content5
-				</Pane>
-			</Tab>
-
-			<Tab active="1" type="button">
-				<Pane label="title1" name="1">
-					content1
-				</Pane>
-				<Pane label="title2" name="2">
-					content2
-				</Pane>
-				<Pane label="title3" name="3">
-					content3
-				</Pane>
-				<Pane label="title4" name="4">
-					content4
-				</Pane>
-				<Pane label="title5" name="5" disabled>
-					content5
-				</Pane>
-			</Tab>
+			<div style={{ height: 1400 }}></div>
+			<Img width="10em" height="10em" src="https://gist.github.com/brettlangdon/85942af486eb79118467/raw/2a7409cd3c26a90b2e82bdc40dc7db18b92b3517/01151_inthedeep_2560x1600.jpg"></Img>
 		</>
 	);
 }

@@ -1,9 +1,9 @@
 import React from "react"; 
-import { Image } from "./index";
+import { Img } from "./index";
 
 export default {
   title: "image",
-  component: Image,
+  component: Img,
 };
 export const Demo = () => {
   return  <></>

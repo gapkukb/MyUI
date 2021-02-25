@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./stylus/index.styl";
+import Lazy from "./util/lazy";
 ReactDOM.render(
   <React.StrictMode>
     <App />
