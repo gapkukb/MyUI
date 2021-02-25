@@ -2,9 +2,11 @@ import { FC, ImgHTMLAttributes, useEffect, useLayoutEffect, useRef, useState } f
 import classnames from "classnames";
 import "./index.styl";
 import Lazy from "../../util/lazy";
-import { noncestr, noop } from "../../util";
-const _placeholder =
-	"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M224%20387.814V512L32 320l192-192v126.912C447.375 260.152 437.794 103.016 380.93 0 521.287 151.707 491.48 394.785 224 387.814z'/%3E%3C/svg%3E";
+import { noop } from "../../util";
+export const config = {
+	placeholder: "", // data uri 图片
+	error: "",
+};
 export type ImageProps = Partial<{
 	lazy: boolean;
 	fit: "contain" | "cover" | "fill" | "none" | "scale";
@@ -32,37 +34,31 @@ export const Img: FC<ImageProps> = ({
 	...rest
 }) => {
 	const ref = useRef<HTMLImageElement>(null);
-	const holder = placeholder === false ? undefined : placeholder || _placeholder;
 	useLayoutEffect(() => {
-		Lazy.add({
-			lazy,
-			element: ref.current!,
-			src,
-			placeholder: holder,
-			error,
-		});
-		return () => {
-			Lazy.remove(ref.current!);
-		};
+		Lazy.add(ref.current!);
+		return () => Lazy.remove(ref.current!);
 	}, [src]);
 	const w = hasUnit(width);
 	const h = hasUnit(height);
 
 	const props = {
-		className: classnames("image", fit, {}),
-		style: {
+		"className": classnames("image", fit, {}),
+		"style": {
 			width: w ? width : undefined,
 			height: h ? height : undefined,
 			...style,
 		},
-		width: w ? undefined : width,
-		height: h ? undefined : height,
+		"width": w ? undefined : width,
+		"height": h ? undefined : height,
+		"data-lazy": lazy,
+		"data-src": src,
+		"data-error": error,
+		"data-placeholder": placeholder,
 		ref,
-		src: holder,
-        onClick,
+		onClick,
 		...rest,
 	};
 
-	return <img {...props}/>;
+	return <img {...props} />;
 };
 export default Img;

@@ -28,21 +28,64 @@ iii.也可以独立在网络异常和服务器异常情况之外单独处理
 import { FC, CSSProperties } from "react";
 import classnames from "classnames";
 import "./index.styl";
-export type AsyncViewProps = {
+import Icon from "../icon";
+
+export enum AsyncStatus {
+	Loading,
+	Empty,
+	EmptyBySearch,
+	EmptyByFilter,
+	EmptyByDeny,
+	Error,
+	ErrorByNetwork,
+	ErrorBySever,
+	ErrorByTimeout,
+	Success,
+}
+export type AsyncViewProps = { state: AsyncStatus } & Partial<{
 	className: string;
 	style: CSSProperties;
-};
+}>;
+function renderLoading() {}
+function renderEmpty() {}
+function renderEmptyBySearch() {}
+function renderEmptyByFilter() {}
+function renderEmptyByDeny() {}
+function renderError() {}
+function renderErrorByNetwork() {}
+function renderErrorBySever() {}
+function renderErrorByTimeout() {}
+const loading = <></>;
+const renders: JSX.Element[] = [loading];
 
-export const AsyncView: FC<AsyncViewProps> = ({ className, style, children, ...rest }) => {
+export const AsyncView: FC<AsyncViewProps> = ({ state, className, style, children, ...rest }) => {
 	function clickHandler() {}
+
 	const props = {
-		className: classnames("async-view", {}),
+		className: classnames("async", {}),
 		style: {
 			...style,
 		},
 		onClick: clickHandler,
 		...rest,
 	};
-	return <div {...props}>{children}</div>;
+	const render = renders[state];
+	return (
+		<div {...props}>
+			{state === AsyncStatus.Success ? (
+				<div className="async__normal"></div>
+			) : (
+				<div className="async__abnormal">
+					<div className="async__explain">
+						<Icon name="expeditedssl" size="100" brand></Icon>
+						<div className="async__reason">用户无权限</div>
+					</div>
+					<div className="async__action">
+						<button>联系客服</button>
+					</div>
+				</div>
+			)}
+		</div>
+	);
 };
 export default AsyncView;

@@ -1,3 +1,5 @@
+import "intersection-observer";
+import { config } from "../package/image";
 type LazyImageProps = {
 	element: Element;
 	lazy?: boolean;
@@ -5,52 +7,60 @@ type LazyImageProps = {
 	src?: string;
 	error?: string;
 };
-
-function process(props: LazyImageProps) {
+export const option: IntersectionObserverInit = {
+	threshold: 0,
+	rootMargin: "20px",
+};
+type HTMLImageElementLike = HTMLImageElement & { clear?: Function };
+export function load(el: HTMLImageElementLike) {
 	let image = new Image();
-	let target = props.element as HTMLImageElement;
-	image.crossOrigin = "anonymous";
+	let placeholder = el.dataset.placeholder;
+	placeholder = placeholder === "false" ? undefined : placeholder || config.placeholder;
+	const error = el.dataset.error || config.error;
+	const src = el.dataset.src;
+	if (placeholder) el.src = placeholder;
+
 	image.onload = () => {
-		target.src = image.src;
-		target.onclick = image.onerror = image.onload = null;
-		image = target = props = null as any;
+		el.src = image.src;
+		el.onclick = image.onerror = image.onload = null;
+		image = el = el = null as any;
 	};
-	if (props.error) {
-		image.onerror = (e) => {
-			target.src = props.error!;
-			target.onclick = () => {
-                target.src = props.placeholder!;
-				image.src = props.src!;
+	// 如果配置了错误图片地址,那么会开启点击重试功能
+	if (error) {
+		image.onerror = () => {
+			el.src = error;
+			el.onclick = () => {
+				el.onclick = null;
+				if (placeholder) el.src = placeholder;
+				image.src = "";
+				image.src = src!;
 			};
 		};
 	}
-	image.src = props.src!;
+	image.src = src!;
+	el.removeAttribute("data-placeholder");
 }
 
 export class Lazy {
-	static map: WeakMap<Element, LazyImageProps> = new WeakMap();
-
-	static add(props: LazyImageProps) {
-		this.map.set(props.element, props);
-		if (props.lazy) lazyImageObserver.observe(props.element);
-		else process(props);
+	static map: WeakMap<HTMLImageElement, HTMLImageElement> = new WeakMap();
+	static add(el: HTMLImageElement) {
+		this.map.set(el, el);
+		if (el.dataset.lazy === "true") lazyImageObserver.observe(el);
+		else load(el);
 	}
-	static remove(el: Element) {
+	static remove(el: HTMLImageElementLike) {
 		this.map.delete(el);
+		lazyImageObserver.unobserve(el);
 	}
 }
-const lazyImageObserver = new IntersectionObserver(
-	function (entries, observer) {
-		entries.forEach(function (entry) {
-			if (entry.isIntersecting) {
-				let target = entry.target as HTMLImageElement;
-				process(Lazy.map.get(target)!);
-				observer.unobserve(target);
-				Lazy.remove(target);
-			}
-		});
-	},
-	{ threshold: 0, rootMargin: "20px" }
-);
+const lazyImageObserver = new IntersectionObserver(function (images) {
+	images.forEach(function (image) {
+		if (image.isIntersecting) {
+			let target = image.target as HTMLImageElement;
+			load(Lazy.map.get(target)!);
+			Lazy.remove(target);
+		}
+	});
+}, option);
 
 export default Lazy;
