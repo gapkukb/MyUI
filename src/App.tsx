@@ -20,9 +20,21 @@ function App() {
 				<Pane label="title5" name="5" disabled>
 					content5
 				</Pane>
+				<Pane label="title5" name="6" disabled>
+					content5
+				</Pane>
+				<Pane label="title5" name="7" disabled>
+					content5
+				</Pane>
+				<Pane label="title5" name="8" disabled>
+					content5
+				</Pane>
+				<Pane label="title5" name="9" disabled>
+					content5
+				</Pane>
 			</Tab>
 
-            <Tab active="1" lazy type="card">
+			<Tab active="1" lazy type="card">
 				<Pane label="title1" name="1">
 					content1
 				</Pane>
@@ -40,7 +52,7 @@ function App() {
 				</Pane>
 			</Tab>
 
-            <Tab active="1" type="button">
+			<Tab active="1" type="button">
 				<Pane label="title1" name="1">
 					content1
 				</Pane>

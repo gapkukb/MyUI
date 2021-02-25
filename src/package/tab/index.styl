@@ -4,9 +4,12 @@
     &__header
         position relative
         display flex
+        overflow auto hidden
         border-bottom 1px solid #ddd
         user-select none
-        touch-action none
+
+        &::-webkit-scrollbar
+            display none
 
         &--card > ^[0]__name
             margin-right 8px
@@ -43,6 +46,9 @@
         height 3px
         background-color #ee0a24
         transition transform 300ms
+
+    &__body
+        touch-action none
 
     &__pane
         &.inactive

@@ -131,24 +131,10 @@ export class Tab extends Component<TabProps, { active: string | number }> {
 		});
 	};
 	renderBody = () => {
-		const { bodyClassName } = this.props;
-		return <div className={classnames("tab__body", bodyClassName)}>{this.renderTabContent()}</div>;
-	};
-
-	render() {
-		const { children, className, style, footer, touchable, onChange } = this.props;
+		const { bodyClassName, touchable } = this.props;
 		const props = {
-			className: classnames("tab", className),
-			style: {
-				...style,
-			},
-			// onClick: clickHandler,
-			// onPointerDown: touchMixin.pointerStart.bind(touchMixin),
-			// onPointerMove(e:React.PointerEvent){
-			//     touchMixin.pointerMove(e)
-			// },
-			// onPointerUp: touchMixin.pointerEnd.bind(touchMixin),
-			// onPointerCancel: touchMixin.pointerEnd.bind(touchMixin),
+			className: classnames("tab__body", bodyClassName),
+			style: {},
 		};
 		if (touchable) {
 			Object.assign(props, {
@@ -158,6 +144,18 @@ export class Tab extends Component<TabProps, { active: string | number }> {
 				onTouchCancel: this.touchEnd,
 			});
 		}
+		return <div {...props}>{this.renderTabContent()}</div>;
+	};
+
+	render() {
+		const { className, style, footer } = this.props;
+		const props = {
+			className: classnames("tab", className),
+			style: {
+				...style,
+			},
+		};
+
 		return (
 			<div {...props}>
 				{this.renderHeader()}
