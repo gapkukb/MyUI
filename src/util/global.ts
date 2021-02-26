@@ -34,3 +34,5 @@ export const spacing = Object.keys(_spacing);
 export const global = {
 	responsive: true,
 };
+
+export declare var aaa: 111;

@@ -1,7 +1,8 @@
+//@ts-nocheck
 import React, { useRef, useState } from "react";
-import AsyncView, { status } from "./package/async-view";
-import { Img } from "./package/image";
+import { VirtualScroller } from "./package/virtual-scroller";
 
+const data = new Array(100000).fill(0).map((_, i) => ({ index: i, content: `content${i}` }));
 function App() {
 	const [state, setState] = useState<boolean>(true);
 	setTimeout(() => {
@@ -10,22 +11,12 @@ function App() {
 
 	return (
 		<>
-			{/* <div style={{ height: 1400 }}></div> */}
-			<AsyncView state={status.loading}>abc</AsyncView>
-			<AsyncView state={status.empty}>
-				abc
-				<div slot="empty-action">
-					<button>返回</button>
-				</div>
-			</AsyncView>
-			<AsyncView state={status.emptyByDeny}>abc</AsyncView>
-			<AsyncView state={status.emptyByFilter}>abc</AsyncView>
-			<AsyncView state={status.emptyBySearch}>abc</AsyncView>
-			<AsyncView state={status.failed}>abc</AsyncView>
-			<AsyncView state={status.failedByNetwork}>abc</AsyncView>
-			<AsyncView state={status.failedBySever}>abc</AsyncView>
-			<AsyncView state={status.failedByTimeout}>abc</AsyncView>
-			<AsyncView state={status.ok}>abc</AsyncView>
+			<VirtualScroller
+				data={data}
+				render={(scope: typeof data[0]) => (
+					<div key={scope.index} style={{ lineHeight: "40px", borderBottom: "1px solid red" }}>{scope.content}</div>
+				)}
+			></VirtualScroller>
 		</>
 	);
 }

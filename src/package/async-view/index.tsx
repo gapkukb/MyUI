@@ -32,7 +32,10 @@ import Icon from "../icon";
 import { fixUnit } from "../../util/unit";
 import { getChildren } from "../../util/children";
 
-export type AsyncViewProps = { state: Status } & Partial<{
+export type AsyncViewProps = {
+	/* 如果state ===  status.custom 那么必须要实现名为custom的插槽*/
+	state: Status;
+} & Partial<{
 	className: string;
 	style: CSSProperties;
 	width: Numeric;
@@ -40,7 +43,7 @@ export type AsyncViewProps = { state: Status } & Partial<{
 }>;
 
 type Status = keyof typeof status;
-type ConfigKeys = Exclude<Status, "ok">;
+type ConfigKeys = Exclude<Status, "ok" | "custom">;
 
 export const status = {
 	loading: "loading",
@@ -101,17 +104,13 @@ export const config: Record<ConfigKeys, { icon: string; text: string; action?: R
 		text: "请求超时,请点击重试",
 		action: <div></div>,
 	},
-	custom: {
-		icon: "",
-		text: "",
-	},
 };
 
 export const AsyncView: FC<AsyncViewProps> = ({ state, width, height, className, style, children, ...rest }) => {
 	function clickHandler() {}
 
 	const props = {
-		className: classnames("async", {}),
+		className: classnames("async", className, {}),
 		style: {
 			minWidth: fixUnit(width),
 			minHeight: fixUnit(height),
@@ -120,13 +119,13 @@ export const AsyncView: FC<AsyncViewProps> = ({ state, width, height, className,
 		onClick: clickHandler,
 		...rest,
 	};
-	const { nodes, slots } = getChildren(children);
+	const { childNodes, slots } = getChildren(children);
 	const cur = config[state as ConfigKeys];
 
 	return (
 		<div {...props}>
 			{state === status.ok ? (
-				<div className="async__normal">{nodes}</div>
+				<div className="async__normal">{childNodes}</div>
 			) : (
 				slots[state] || (
 					<div className="async__abnormal">
@@ -134,7 +133,7 @@ export const AsyncView: FC<AsyncViewProps> = ({ state, width, height, className,
 							<Icon name={cur.icon} size="100"></Icon>
 							<div className="async__reason">{cur.text}</div>
 						</div>
-						<div className="async__action">{slots[state + "-action"] || cur.action}</div>
+						{slots[state + "-action"] || cur.action}
 					</div>
 				)
 			)}

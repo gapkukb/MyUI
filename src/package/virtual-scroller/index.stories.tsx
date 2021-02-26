@@ -1,9 +1,9 @@
 import React from "react"; 
-import { VirtualScroller } from "./index";
+import { VirtualScrollerItem } from "./index";
 
 export default {
   title: "virtual-scroller",
-  component: VirtualScroller,
+  component: VirtualScrollerItem,
 };
 export const Demo = () => {
   return  <></>
