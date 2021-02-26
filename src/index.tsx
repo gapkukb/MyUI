@@ -1,14 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
+import { config } from "./package/async-view";
 import reportWebVitals from "./reportWebVitals";
 import "./stylus/index.styl";
 import Lazy from "./util/lazy";
+config.empty.icon = "flag";
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById("app")
+	<React.StrictMode>
+		<App />
+	</React.StrictMode>,
+	document.getElementById("app")
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -25,65 +25,118 @@ iii.也可以独立在网络异常和服务器异常情况之外单独处理
 不管哪种边界情况,都推荐使用 图案(可选)+文案(必选)+操作 的处理方式
 */
 
-import { FC, CSSProperties } from "react";
+import { FC, CSSProperties, Children, isValidElement, ReactNode } from "react";
 import classnames from "classnames";
 import "./index.styl";
 import Icon from "../icon";
+import { fixUnit } from "../../util/unit";
+import { getChildren } from "../../util/children";
 
-export enum AsyncStatus {
-	Loading,
-	Empty,
-	EmptyBySearch,
-	EmptyByFilter,
-	EmptyByDeny,
-	Error,
-	ErrorByNetwork,
-	ErrorBySever,
-	ErrorByTimeout,
-	Success,
-}
-export type AsyncViewProps = { state: AsyncStatus } & Partial<{
+export type AsyncViewProps = { state: Status } & Partial<{
 	className: string;
 	style: CSSProperties;
+	width: Numeric;
+	height: Numeric;
 }>;
-function renderLoading() {}
-function renderEmpty() {}
-function renderEmptyBySearch() {}
-function renderEmptyByFilter() {}
-function renderEmptyByDeny() {}
-function renderError() {}
-function renderErrorByNetwork() {}
-function renderErrorBySever() {}
-function renderErrorByTimeout() {}
-const loading = <></>;
-const renders: JSX.Element[] = [loading];
 
-export const AsyncView: FC<AsyncViewProps> = ({ state, className, style, children, ...rest }) => {
+type Status = keyof typeof status;
+type ConfigKeys = Exclude<Status, "ok">;
+
+export const status = {
+	loading: "loading",
+	empty: "empty",
+	emptyBySearch: "emptyBySearch",
+	emptyByFilter: "emptyByFilter",
+	emptyByDeny: "emptyByDeny",
+	failed: "failed",
+	failedByNetwork: "failedByNetwork",
+	failedBySever: "failedBySever",
+	failedByTimeout: "failedByTimeout",
+	ok: "ok",
+	custom: "custom",
+} as const;
+
+export const config: Record<ConfigKeys, { icon: string; text: string; action?: ReactNode }> = {
+	loading: {
+		icon: "spinner",
+		text: "加载中...",
+	},
+	empty: {
+		icon: "inbox",
+		text: "没有数据",
+		action: <div></div>,
+	},
+	emptyBySearch: {
+		icon: "search",
+		text: "搜索结果为空",
+		action: <div></div>,
+	},
+	emptyByFilter: {
+		icon: "filter",
+		text: "筛选结果为空",
+		action: <div></div>,
+	},
+	emptyByDeny: {
+		icon: "expeditedssl",
+		text: "用户无权限,请联系管理员",
+		action: <div></div>,
+	},
+	failed: {
+		icon: "exclamation-triangle",
+		text: "访问出错了,请稍后再试",
+		action: <div></div>,
+	},
+	failedByNetwork: {
+		icon: "spinner",
+		text: "网络连接错误,请检查您的网络",
+		action: <div></div>,
+	},
+	failedBySever: {
+		icon: "spinner",
+		text: "服务器错误,请稍后再试或联系客服",
+		action: <div></div>,
+	},
+	failedByTimeout: {
+		icon: "spinner",
+		text: "请求超时,请点击重试",
+		action: <div></div>,
+	},
+	custom: {
+		icon: "",
+		text: "",
+	},
+};
+
+export const AsyncView: FC<AsyncViewProps> = ({ state, width, height, className, style, children, ...rest }) => {
 	function clickHandler() {}
 
 	const props = {
 		className: classnames("async", {}),
 		style: {
+			minWidth: fixUnit(width),
+			minHeight: fixUnit(height),
 			...style,
 		},
 		onClick: clickHandler,
 		...rest,
 	};
-	const render = renders[state];
+	const { nodes, slots } = getChildren(children);
+	const cur = config[state as ConfigKeys];
+
 	return (
 		<div {...props}>
-			{state === AsyncStatus.Success ? (
-				<div className="async__normal"></div>
+			{state === status.ok ? (
+				<div className="async__normal">{nodes}</div>
 			) : (
-				<div className="async__abnormal">
-					<div className="async__explain">
-						<Icon name="expeditedssl" size="100" brand></Icon>
-						<div className="async__reason">用户无权限</div>
+				slots[state] || (
+					<div className="async__abnormal">
+						<div className="async__explain">
+							<Icon name={cur.icon} size="100"></Icon>
+							<div className="async__reason">{cur.text}</div>
+						</div>
+						<div className="async__action">{slots[state + "-action"] || cur.action}</div>
 					</div>
-					<div className="async__action">
-						<button>联系客服</button>
-					</div>
-				</div>
+				)
 			)}
 		</div>
 	);
