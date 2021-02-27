@@ -2,7 +2,7 @@ import { FC, ImgHTMLAttributes, useEffect, useLayoutEffect, useRef, useState } f
 import classnames from "classnames";
 import "./index.styl";
 import Lazy from "../../util/lazy";
-import { noop } from "../../util";
+import { nope } from "../../util";
 export const config = {
 	placeholder: "", // data uri 图片
 	error: "",
@@ -30,7 +30,7 @@ export const Img: FC<ImageProps> = ({
 	placeholder,
 	error,
 	src,
-	onClick = noop,
+	onClick = nope,
 	...rest
 }) => {
 	const ref = useRef<HTMLImageElement>(null);

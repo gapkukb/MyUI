@@ -11,46 +11,44 @@ import {
 } from "react";
 import classnames from "classnames";
 import { throttle } from "helpful-decorators";
-import { noop } from "../../util";
+import { nope } from "../../util";
 import { PaneProps, TabProps } from "./types";
 const touchMixin = {
-    x: 0,
-    deltaX:0,
-    y: 0,
-    deltaY:0,
-    time:0,
-    lastTime:0,
-    deltaTime:0,
-    velocity:0,
-    touched:false,
-	pointerStart (e: React.PointerEvent) {
-        this.touched = true
-        this.x = e.pageX
-        this.y = e.pageY
-        this.time = Date.now()
-    },
-    
+	x: 0,
+	deltaX: 0,
+	y: 0,
+	deltaY: 0,
+	time: 0,
+	lastTime: 0,
+	deltaTime: 0,
+	velocity: 0,
+	touched: false,
+	pointerStart(e: React.PointerEvent) {
+		this.touched = true;
+		this.x = e.pageX;
+		this.y = e.pageY;
+		this.time = Date.now();
+	},
+
 	pointerMove(e: React.PointerEvent) {
-        if(!this.touched) return
-        const now = Date.now()
-        if(now - this.lastTime < 1000 / 24) return
-        this.lastTime = now
-        console.log(123);
-    },
+		if (!this.touched) return;
+		const now = Date.now();
+		if (now - this.lastTime < 1000 / 24) return;
+		this.lastTime = now;
+		console.log(123);
+	},
 	pointerEnd(e: React.PointerEvent) {
-        if(!this.touched) return
-        this.touched = false
-        this.deltaX = e.pageX - this.x
-        this.deltaY = e.pageY - this.y
-        this.deltaTime = Date.now() - this.time
-        console.log(this.deltaX / this.deltaTime);
-        
-        if(this.deltaX > 400 || Math.abs(this.deltaX / this.deltaTime) > 0.5){
-            console.log(123);
-            
-        }
-        
-    },
+		if (!this.touched) return;
+		this.touched = false;
+		this.deltaX = e.pageX - this.x;
+		this.deltaY = e.pageY - this.y;
+		this.deltaTime = Date.now() - this.time;
+		console.log(this.deltaX / this.deltaTime);
+
+		if (this.deltaX > 400 || Math.abs(this.deltaX / this.deltaTime) > 0.5) {
+			console.log(123);
+		}
+	},
 };
 
 export const Tab: FC<TabProps> = ({
@@ -61,7 +59,7 @@ export const Tab: FC<TabProps> = ({
 	active: _active = 0,
 	mode = "multiple",
 	type = "normal",
-	onChange = noop,
+	onChange = nope,
 	footer,
 	headerClassName,
 	bodyClassName,
@@ -120,9 +118,9 @@ export const Tab: FC<TabProps> = ({
 		},
 		onClick: clickHandler,
 		onPointerDown: touchMixin.pointerStart.bind(touchMixin),
-		onPointerMove(e:React.PointerEvent){
-            touchMixin.pointerMove(e)
-        },
+		onPointerMove(e: React.PointerEvent) {
+			touchMixin.pointerMove(e);
+		},
 		onPointerUp: touchMixin.pointerEnd.bind(touchMixin),
 		onPointerCancel: touchMixin.pointerEnd.bind(touchMixin),
 		...rest,

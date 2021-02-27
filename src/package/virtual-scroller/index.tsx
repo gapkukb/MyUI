@@ -57,7 +57,7 @@ export const VirtualScroller: FC<VirtualScrollerProps> = ({
 	}, []);
 
 	useEffect(() => {
-        setData(slice(current));
+		setData(slice(current));
 		padding.current!.style.height = body.current!.offsetHeight + "px";
 	}, [current]);
 

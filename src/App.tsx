@@ -1,22 +1,37 @@
-//@ts-nocheck
 import React, { useRef, useState } from "react";
-import { VirtualScroller } from "./package/virtual-scroller";
+import { Popup } from "./package/popup";
+import { PurePortal } from "./package/portal";
 
-const data = new Array(100000).fill(0).map((_, i) => ({ index: i, content: `content${i}` }));
 function App() {
-	const [state, setState] = useState<boolean>(true);
+	const [open, setOpen] = useState<boolean>(false);
 	setTimeout(() => {
-		setState(false);
-	}, 3000);
-
+		setOpen(true);
+	}, 2000);
 	return (
 		<>
-			<VirtualScroller
-				data={data}
-				render={(scope: typeof data[0]) => (
-					<div key={scope.index} style={{ lineHeight: "40px", borderBottom: "1px solid red" }}>{scope.content}</div>
-				)}
-			></VirtualScroller>
+			<div className="test">
+				<div id="abc">这里是原来就有的内容</div>
+				<PurePortal mount="#abc">
+					<div>这里是Portal动态插入的内容</div>
+				</PurePortal>
+				<div id="efg">content to be overwritten</div>
+			</div>
+			{/* {new Array(100).fill(0).map((_, i) => (
+				<div key={i}>11</div>
+			))}
+			<Popup open={true}>
+				{new Array(10).fill(0).map((_, i) => (
+					<div key={i}>22</div>
+				))}
+			</Popup>
+			{open && (
+				<Popup open={true}>
+					{new Array(100).fill(0).map((_, i) => (
+						<div key={i}>33</div>
+					))}
+				</Popup>
+			)}
+			<button onClick={() => setOpen((prev) => !prev)}>open</button> */}
 		</>
 	);
 }

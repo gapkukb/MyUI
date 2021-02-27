@@ -1,8 +1,8 @@
 import { forwardRef } from "react";
-import { noop } from "../../util";
+import { nope } from "../../util";
 //TODO
 export const Portal = forwardRef<any, any>(function (props, ref) {
-  return <div></div>;
+	return <div></div>;
 });
 
 Portal.displayName = "Portal";

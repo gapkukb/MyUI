@@ -1,5 +1,5 @@
 import { spacing as _spacing } from "../json/vars.json";
-import { breapointEventData } from "./element";
+import { breapointEventData } from "./dom";
 
 declare global {
 	type LengthUnit =
