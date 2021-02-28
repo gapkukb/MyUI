@@ -103,7 +103,7 @@ export const Portal = forwardRef<PortalHandlers, PortalProps>((props, ref) => {
 
 	useLayoutEffect(() => {
 		// 背景层处理
-		if (!visible || closeByLayer) return nope;
+		if (!visible || !closeByLayer) return nope;
 		const { position, top, bottom, left, right } = node.style;
 		const parent = getParent(mount);
 		Object.assign(node.style, {
@@ -122,11 +122,9 @@ export const Portal = forwardRef<PortalHandlers, PortalProps>((props, ref) => {
 	useLayoutEffect(() => {
 		// 禁止父元素可滚动
 		const parent = getParent(mount);
-		if (!parent) return;
-		// if (!visible || !scrollable || !(parent instanceof HTMLElement) || !scrollbarWidth(parent)) return nope;
-		console.log(parent);
-		patchElement(parent as HTMLElement);
-		// return () => restoreElement(parent);
+		if (!visible || !scrollable || !(parent instanceof HTMLElement) || !scrollbarWidth(parent)) return nope;
+		patchElement(parent);
+		return () => restoreElement(parent);
 	}, [mount, visible, scrollable, getParent]);
 
 	useLayoutEffect(() => {
@@ -155,10 +153,8 @@ export const Portal = forwardRef<PortalHandlers, PortalProps>((props, ref) => {
 		return on(document.body, "keyup", onKeyUp);
 	}, [esc, visible]);
 
-	console.log(visible && node && 123);
-
 	return visible && node ? (
-		<PurePortal mount={mount} replace={replace} ref={purePortalRef}>
+		<PurePortal mount={node} replace={replace} ref={purePortalRef}>
 			<MountElement node={node} getParent={getParent as any} mount={mount} />
 			{children}
 		</PurePortal>
