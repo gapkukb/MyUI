@@ -3,10 +3,10 @@ import { useLayoutEffect } from "react";
 export interface MountElementProps {
 	node: HTMLElement;
 	getParent(selector: string | HTMLElement): HTMLElement;
-	selector: HTMLElement | string;
+	mount: HTMLElement | string;
 }
 
-export function MountElement({ node, getParent, selector }: MountElementProps) {
-	useLayoutEffect(() => getParent(selector).appendChild(node).remove, [node, getParent, selector]);
+export function MountElement({ node, getParent, mount }: MountElementProps) {
+	useLayoutEffect(() => getParent(mount).appendChild(node).remove, [node, getParent, mount]);
 	return null;
 }

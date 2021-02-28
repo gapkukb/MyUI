@@ -4,8 +4,10 @@ import App from "./App";
 import { config } from "./package/async-view";
 import reportWebVitals from "./reportWebVitals";
 import "./stylus/index.styl";
-import Lazy from "./util/lazy";
-config.empty.icon = "flag";
+import { version } from "../package.json";
+
+// document.documentElement.dataset.ui = version;
+
 ReactDOM.render(
 	<React.StrictMode>
 		<App />

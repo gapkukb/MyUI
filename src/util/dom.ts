@@ -1,4 +1,4 @@
-import { ReactNode, Children, cloneElement, CSSProperties } from "react";
+import { ReactNode, Children, cloneElement, CSSProperties, HTMLAttributes } from "react";
 import { global } from "./global";
 
 export function filterByComponentName(children: ReactNode, name: string, props?: Record<string, any>) {
@@ -42,35 +42,57 @@ function resizeHandler() {
 		currentBreakPoint = current;
 	}
 }
+
 if (global.responsive) {
 	window.addEventListener("resize", resizeHandler);
 }
+/** 客户端渲染 */
+export const CSR = !!(typeof window !== "undefined" && window);
 
-export function $(selector: HTMLElement | string, parent?: HTMLElement) {
-	if (!selector) return null;
+export function getNode(selector: string | Element, parent: HTMLElement = document.body) {
 	if (selector instanceof Element) return selector;
-	if (typeof selector === "string") return (parent || document).querySelector(selector);
+	if (typeof selector === "string") return parent.querySelector(selector);
 	throw new Error("invalid selector");
 }
 
-// function createElement<K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions)
-// export function createElement(tagName: string, options?: ElementCreationOptions) {
-// 	const node = document.createElement(tagName);
-// 	return node;
-// }
+export function createElement<K extends keyof HTMLElementTagNameMap>(
+	tagName: K,
+	options?: ElementCreationOptions
+): HTMLElementTagNameMap[K];
+export function createElement<K extends keyof HTMLElementDeprecatedTagNameMap>(
+	tagName: K,
+	options?: ElementCreationOptions
+): HTMLElementDeprecatedTagNameMap[K];
+export function createElement(tagName: string, options?: ElementCreationOptions): HTMLElement;
+export function createElement(tagName: string, options?: ElementCreationOptions) {
+	const node = document.createElement(tagName, options);
+	return node;
+}
+
+export function createNode(parent: Node | HTMLElement, tag = "div", options?: HTMLAttributes<Element>): HTMLElement {
+	return parent.appendChild(Object.assign(createElement(tag), options));
+}
+
+export function removeAllChildren(node: Node) {
+	while (node && node.firstChild) {
+		node.firstChild.remove();
+	}
+}
 
 export function diffStyle<T = CSSProperties>(prev: T = {} as any, next: T = {} as any) {
 	const ret = {} as T;
 	const prevKeys = Object.keys(prev);
 	const nextKeys = Object.keys(next);
-	let index = prevKeys.length;
-	while (index--) {
+	let i = prevKeys.length;
+	let key = "";
+	while (i--) {
+		key = prevKeys[i];
 		// @ts-ignore
 		if (!next[key]) ret[key] = "";
 	}
-	index = prevKeys.length;
-	while (index--) {
-		const key = nextKeys[index];
+	i = prevKeys.length;
+	while (i--) {
+		key = nextKeys[i];
 		// @ts-ignore
 		ret[key] = next[key];
 	}
@@ -127,19 +149,35 @@ export function restoreElement(el: HTMLElement) {
 		meta.count -= 1;
 	}
 }
+type E = HTMLElement | Window | Document;
 export function on<K extends keyof HTMLElementEventMap>(
-	el: HTMLElement,
+	el: E,
 	eventName: K,
 	listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
 	options?: boolean | AddEventListenerOptions
 ): void;
 export function on(
-	el: HTMLElement,
+	el: E,
 	eventName: string,
 	listener: EventListenerOrEventListenerObject,
 	options?: boolean | AddEventListenerOptions
 ): void;
-export function on(el: HTMLElement, eventName: any, listener: any, options?: any) {
+export function on(el: E, eventName: any, listener: any, options?: any) {
 	el.addEventListener(eventName, listener, options);
 	return () => el.removeEventListener(eventName, listener);
+}
+
+export function setStyle(node: HTMLElement, style: CSSProperties) {
+	const css = node.style;
+	const keys = Object.keys(style) as Array<keyof CSSProperties>;
+	let i = keys.length;
+	let key = "";
+	while (i--) {
+		key = keys[i];
+		const isCssVars = key.startsWith("--");
+		if (process.env.NODE_ENV !== "production" && !isCssVars) {
+		}
+		if (isCssVars) css.setProperty(key, (style as any)[key]);
+		else css[key as any] = (style as any)[key];
+	}
 }
