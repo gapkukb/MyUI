@@ -1,0 +1,85 @@
+$vars = json( "../../json/vars.json", { hash: true } )
+$colors = $vars.colors
+
+.button
+    display inline-flex
+    flex-wrap nowrap
+    align-items center
+    overflow visible
+    box-sizing border-box
+    max-width 100%
+    outline 0
+    border 0.5px solid
+    background-color currentColor
+    text-align center
+    text-decoration none
+    text-transform none
+    white-space nowrap
+    font-weight 400
+    cursor pointer
+    user-select none
+    appearance button
+    transition opacity 300ms
+
+    &:not(:disabled):hover
+        opacity .7
+    $size( height, padding )
+        padding 0 padding
+        height height
+        line-height @height
+
+    &.large
+        $size 50px 24px
+
+    &.normal
+        $size 40px 16px
+
+    &.small
+        $size 30px 8px
+
+    &.mini
+        $size 20px 4px
+
+    &.block
+        display block
+        width 100%
+
+    &.primary
+        color $colors.blue
+
+    &.danger
+        color $colors.red
+
+    &.default
+        border-color transparent
+        background none
+
+        &>^[0]__text
+            color inherit
+
+    &.success
+        color $colors.green
+
+    &.info
+        color $colors.cyan
+
+    &.warning
+        color $colors.amber
+
+    &.link
+        color $colors.blue
+
+    &.dark
+        color $colors.black
+
+    &.light
+        color $colors.white
+
+    &.ghost
+        background none
+
+    &__text
+        overflow hidden
+        min-width 0
+        color #fff
+        text-overflow ellipsis

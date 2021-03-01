@@ -5,6 +5,7 @@ import "./index.styl";
 import { fixUnit } from "../../util/unit";
 import Icon from "../icon";
 import Progress, { LodingProps } from "../loading";
+import { colors } from "../../json/vars.json";
 
 export type ButtonProps = AnchorHTMLAttributes<HTMLElement> &
   Omit<ButtonHTMLAttributes<HTMLElement>, "type"> &
@@ -32,7 +33,7 @@ export type ButtonProps = AnchorHTMLAttributes<HTMLElement> &
     size: "normal" | "large" | "small" | "mini";
     style: CSSProperties;
     to: string;
-    type: "primary" | "danger" | "default" | "success" | "info" | "warning" | "link" | "dark" | "light";
+    type: "primary" | "danger" | "default" | "success" | "info" | "warning" | "link" | "dark" | "light"
     width: Numeric;
   }>;
 

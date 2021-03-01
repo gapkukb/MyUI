@@ -1,9 +1,9 @@
 import React from "react"; 
-import { FloatMenu } from "./index";
+import { Fab } from "./index";
 
 export default {
   title: "float-menu",
-  component: FloatMenu,
+  component: Fab,
 };
 export const Demo = () => {
   return  <></>
