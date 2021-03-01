@@ -155,13 +155,13 @@ export function on<K extends keyof HTMLElementEventMap>(
 	eventName: K,
 	listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
 	options?: boolean | AddEventListenerOptions
-): void;
+): () => void;
 export function on(
 	el: E,
 	eventName: string,
-	listener: EventListenerOrEventListenerObject,
+	listener: EventListenerOrEventListenerObject | null,
 	options?: boolean | AddEventListenerOptions
-): void;
+): () => void;
 export function on(el: E, eventName: any, listener: any, options?: any) {
 	el.addEventListener(eventName, listener, options);
 	return () => el.removeEventListener(eventName, listener);

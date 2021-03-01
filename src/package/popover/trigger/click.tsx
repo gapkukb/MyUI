@@ -39,7 +39,7 @@ export function PopoverClickTrigger<ChildProps extends PopoverTriggerClickChildP
 			if (!anchor) return;
 			const el = anchor.selector();
 			if (closeOnClickOutside && el && isOutside(e.target as Element, ctx.protalRef.current!, el)) {
-				ctx.popover;
+				ctx.popover.setVisible(false);
 			}
 		},
 		[closeOnClickOutside, ctx.popover, ctx.protalRef]
