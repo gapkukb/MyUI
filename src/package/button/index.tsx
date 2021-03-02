@@ -5,7 +5,6 @@ import "./index.styl";
 import { fixUnit } from "../../util/unit";
 import Icon from "../icon";
 import Progress, { LodingProps } from "../loading";
-import { colors } from "../../json/vars.json";
 
 export type ButtonProps = AnchorHTMLAttributes<HTMLElement> &
 	Omit<ButtonHTMLAttributes<HTMLElement>, "type"> &
@@ -27,13 +26,14 @@ export type ButtonProps = AnchorHTMLAttributes<HTMLElement> &
 		loading: boolean;
 		loadingIcon: LodingProps["type"];
 		nativeType: "button" | "submit" | "reset" | "image";
-		outline: boolean;
+		hollow: boolean;
 		replace: boolean;
 		radius: Spacing | "round" | "circle";
 		size: "normal" | "large" | "small" | "mini";
 		style: CSSProperties;
 		to: string;
-		type: "primary" | "danger" | "default" | "success" | "info" | "warning" | "link" | "dark" | "light";
+		type: "primary" | "danger" | "default" | "success" | "info" | "warning" | "dark" | "light";
+		link: boolean;
 		width: Numeric;
 	}>;
 
@@ -45,7 +45,6 @@ export const Button: FC<ButtonProps> = ({
 	className,
 	color,
 	disabled,
-	ghost,
 	harline,
 	height,
 	href,
@@ -57,24 +56,25 @@ export const Button: FC<ButtonProps> = ({
 	loading,
 	loadingIcon,
 	nativeType = "button",
-	outline,
-	radius,
+	hollow,
+	radius = "xs",
 	size = "normal",
 	style,
 	to,
 	type,
+	link,
 	width,
 	...rest
 }: ButtonProps) => {
 	const Tag = to !== undefined ? "link" : href !== undefined ? "a" : "button";
 	const isButtonNode = Tag === "button";
 	const props: Record<any, any> = {
-		className: classnames("button", type, size, className, {
+		className: classnames("button", type, size, !hollow && `solid`, className, {
 			disabled: !isButtonNode && disabled,
-			outline,
 			harline,
-			["radius--" + radius]: radius,
+			["rounded--" + radius]: radius,
 			block,
+			hollow,
 			circle,
 			loading,
 		}),

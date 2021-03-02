@@ -1,10 +1,9 @@
-$vars = json( "../../json/vars.json", { hash: true } )
+/* $vars = json( "../../json/vars.json", { hash: true } )
 $spacing = $vars.spacing
 $breakpoint = $vars.breakpoint
 $columns = $vars.columns
 $keys = keys( $breakpoint )
-p( $keys[index( $keys, md )] )
-
+p( $keys[index( $keys, md )] ) */
 /*
 // 容器控制
 .grid
@@ -59,48 +58,48 @@ for $key, $value in $breakpoint
     content ""
  */
 .round--
-  $new = merge( $spacing, { pill: 1998px, circle: 100% } )
+    $new = merge( $spacing, { pill: 1998px, circle: 100% } )
 
-  for $name, $size in $new
-    &{$name}
-      border-radius: ( $size / 2 )
+    for $name, $size in $new
+        &{$name}
+            border-radius: ( $size / 2 )
 
 .select--
-  for $prop in all auto none
-    &{$prop}
-      user-select $prop
+    for $prop in all auto none
+        &{$prop}
+            user-select $prop
 
 .pointer--none
-  pointer-events none
+    pointer-events none
 
 .pointer--auto
-  pointer-events auto
+    pointer-events auto
 
 .overflow--
-  for $prop in auto hidden visible scroll
-    &{$prop}
-      overflow $prop
+    for $prop in auto hidden visible scroll
+        &{$prop}
+            overflow $prop
 
 for $prop in absolute fixed relative static sticky
-  .{$prop}
-    position $prop
+    .{$prop}
+        position $prop
 
 for $prop in left right top bottom
-  for $value in 0 50 100
-    .{$prop}--{$value}
-      {$prop}: $value + "%"
+    for $value in 0 50 100
+        .{$prop}--{$value}
+            {$prop}: $value + "%"
 
 for $prop in left right top bottom
-  for $value in 0 50 100
-    .{$prop}--{$value}
-      {$prop}: $value + "%"
+    for $value in 0 50 100
+        .{$prop}--{$value}
+            {$prop}: $value + "%"
 
 .middle--
-  &x
-    transform translate( -50%, 0 )
+    &x
+        transform translate( -50%, 0 )
 
-  &y
-    transform translate( 0, -50% )
+    &y
+        transform translate( 0, -50% )
 
-  &xy
-    transform translate( -50%, -50% )
+    &xy
+        transform translate( -50%, -50% )

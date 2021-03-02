@@ -1,0 +1,78 @@
+$direction( px )
+    &-left
+        border-top-left-radius px
+        border-bottom-left-radius px
+
+    &-right
+        border-top-right-radius px
+        border-bottom-right-radius px
+
+    &-top
+        border-top-left-radius px
+        border-top-right-radius px
+
+    &-bottom
+        border-bottom-right-radius px
+        border-bottom-left-radius px
+
+    &-oppo-1
+        border-top-right-radius px
+        border-bottom-left-radius px
+
+    &-oppo-2
+        border-top-left-radius px
+        border-bottom-right-radius px
+
+.rounded
+    for $key, $item in $vars.spacing
+        &--{$key}
+            $value = ( $item / 2 )
+            border-radius $value
+            $direction $value
+
+    &--pill
+        border-radius 999px
+        $direction 999px
+
+    &--circle
+        border-radius 50%
+        $direction 50%
+
+.border
+    border 1px solid
+
+    for $item in 2 .. 5
+        &--{$item}
+            border-width: $item * 1px
+
+    &--dashed
+        border-style dashed
+
+    &--dotted
+        border-style dotted
+
+    &--groove
+        border-style groove
+
+    $borderdirection( dir )
+        border-{dir} 1px solid
+
+    &-left
+        $borderdirection left
+
+    &-right
+        $borderdirection right
+
+    &-top
+        $borderdirection top
+
+    &-bottom
+        $borderdirection bottom
+
+    &-x
+        $borderdirection top
+        $borderdirection bottom
+
+    &-y
+        $borderdirection left
+        $borderdirection right

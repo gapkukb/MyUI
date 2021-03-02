@@ -23,16 +23,16 @@ function translateToContainerCoordinates({ left, top }: Rect, rect: Rect): Clien
 	};
 }
 
-function getPosition(
-	{ visibile, placement, popover, cushion }: PopoverContext,
-	getContainer: () => Element | null,
-	getPositionParent: () => Element | null,
-	portalRef: RefObject<PortalHandlers>
-): PopoverPosition {
-	// 跳过昂贵的dom操作
-	if (!visibile) return INVISIBLE_POSITION;
-	const container = getContainer();
-	const parent = getPositionParent();
-	const portal = portalRef.current;
-	const anchor = popover;
-}
+// function getPosition(
+// 	{ visibile, placement, popover, cushion }: PopoverContext,
+// 	getContainer: () => Element | null,
+// 	getPositionParent: () => Element | null,
+// 	portalRef: RefObject<PortalHandlers>
+// ): PopoverPosition {
+// 	// 跳过昂贵的dom操作
+// 	if (!visibile) return INVISIBLE_POSITION;
+// 	const container = getContainer();
+// 	const parent = getPositionParent();
+// 	const portal = portalRef.current;
+// 	const anchor = popover;
+// }
