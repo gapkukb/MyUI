@@ -5,7 +5,9 @@ import "./index.styl";
 import { fixUnit } from "../../util/unit";
 import Icon from "../icon";
 import Progress, { LodingProps } from "../loading";
-
+export const buttonConfig = {
+    
+};
 export type ButtonProps = AnchorHTMLAttributes<HTMLElement> &
 	Omit<ButtonHTMLAttributes<HTMLElement>, "type"> &
 	Partial<{
@@ -28,13 +30,15 @@ export type ButtonProps = AnchorHTMLAttributes<HTMLElement> &
 		nativeType: "button" | "submit" | "reset" | "image";
 		hollow: boolean;
 		replace: boolean;
-		radius: Spacing | "round" | "circle";
+		round: Spacing | "round" | "circle";
 		size: "normal" | "large" | "small" | "mini";
 		style: CSSProperties;
 		to: string;
 		type: "primary" | "danger" | "default" | "success" | "info" | "warning" | "dark" | "light";
 		link: boolean;
+		borderless: boolean;
 		width: Numeric;
+		auth: boolean;
 	}>;
 
 export const Button: FC<ButtonProps> = ({
@@ -57,26 +61,32 @@ export const Button: FC<ButtonProps> = ({
 	loadingIcon,
 	nativeType = "button",
 	hollow,
-	radius = "xs",
+	round = "xs",
 	size = "normal",
 	style,
 	to,
-	type,
+	type = "default",
 	link,
 	width,
+	auth,
+	borderless,
 	...rest
 }: ButtonProps) => {
 	const Tag = to !== undefined ? "link" : href !== undefined ? "a" : "button";
 	const isButtonNode = Tag === "button";
+	const _bgcolor = bgcolor?.split(",");
+
 	const props: Record<any, any> = {
-		className: classnames("button", type, size, !hollow && `solid`, className, {
+		className: classnames("button", type, size, className, {
 			disabled: !isButtonNode && disabled,
 			harline,
-			["rounded--" + radius]: radius,
+			["rounded--" + round]: round,
 			block,
 			hollow,
+			solid: !hollow,
 			circle,
 			loading,
+			borderless,
 		}),
 		style: Object.assign(
 			{
@@ -84,6 +94,7 @@ export const Button: FC<ButtonProps> = ({
 				height: fixUnit(height),
 				color,
 				backgroundColor: bgcolor,
+				backgroundImage: `linear-gradient(${bgcolor})`,
 			},
 			style
 		),
@@ -103,12 +114,6 @@ export const Button: FC<ButtonProps> = ({
 			{iconRightSlot || (iconRight && <Icon name={iconRight} className={innerClassname} />)}
 		</Tag>
 	);
-};
-
-Button.defaultProps = {
-	type: "default",
-	nativeType: "button",
-	size: "normal",
 };
 
 export default Button;

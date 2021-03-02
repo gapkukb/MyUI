@@ -4,25 +4,69 @@ import Fab from "./package/float-action-button";
 import Popover from "./package/popover";
 const arr: ButtonProps["type"][] = ["default", "danger", "primary", "success", "warning", "info", "light", "dark"];
 const sizes: ButtonProps["size"][] = ["large", "normal", "small", "mini"];
-const start = sizes.length + 1;
-const factory = (options?: Record<string, any>) => {
-	return (
-		<div>
-			{arr.map((item, index) => (
-				<Button key={item} type={item} size={sizes[index - start]} label="按钮" {...options}></Button>
-			))}
-			{arr.map((item, index) => (
-				<Button key={item} type={item} size={sizes[index - start]} hollow label="按钮" {...options}></Button>
-			))}
-		</div>
-	);
-};
+const types: ButtonProps["type"][] = ["default", "danger", "dark", "info", "light", "primary", "success", "warning"];
+const colors: ButtonProps["color"][] = ["gold", "#5a1513", "rgba(146,94,93,0.5)"];
+const bgcolors: ButtonProps["bgcolor"][] = ["gold", "#5a1513", "rgba(146,94,93,0.5)", "to right, #ff6034, #ee0a24"];
+
 class App extends Component {
 	render() {
 		return (
 			<div>
 				<div>
-					<Button>实心按钮</Button>
+					<span>实心：</span>
+					{types.map((type) => (
+						<Button type={type}>{type}</Button>
+					))}
+				</div>
+				<div>
+					<span>空心：</span>
+					{types.map((type) => (
+						<Button type={type} hollow>
+							{type}
+						</Button>
+					))}
+				</div>
+				<div>
+					<span>尺寸</span>
+					{sizes.map((size) => (
+						<Button size={size}>
+							{size}
+						</Button>
+					))}
+                    <Button width="300" height="60">通过width和height控制具体尺寸</Button>
+				</div>
+                <div>
+					<span>禁用</span>
+					{types.map((type) => (
+						<Button type={type} disabled>
+							{type}
+						</Button>
+					))}
+                    <Button width="300" height="60">通过width和height控制具体尺寸</Button>
+				</div>
+                <div>
+					<span>导航守卫</span>
+                    <Button>URL导航</Button>
+                    <Button>路由导航</Button>
+				</div>
+				<div>
+					<span>自定义颜色：</span>
+					{colors.map((color) => (
+						<>
+							<Button color={color}>{color}</Button>
+							<Button color={color} hollow>
+								{color}
+							</Button>
+						</>
+					))}
+				</div>
+				<div>
+					<span>自定义背景色,支持渐变：</span>
+					{bgcolors.map((color) => (
+						<Button bgcolor={color} hollow>
+							{color}
+						</Button>
+					))}
 				</div>
 
 				<Fab></Fab>

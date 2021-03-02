@@ -1,4 +1,4 @@
-import { spacing as _spacing } from "../json/vars.json";
+import { spacing as _spacing, colors } from "../json/vars.json";
 import { breapointEventData } from "./dom";
 
 declare global {
@@ -24,6 +24,7 @@ declare global {
 	type Spacing = keyof typeof _spacing;
 	type Template<M extends string, N extends string> = `${M}-${N}`;
 	type Valueof<T extends object> = T[keyof T];
+	type Color = keyof typeof colors;
 
 	interface WindowEventMap {
 		breakpointchange: CustomEvent<breapointEventData>;
