@@ -29,26 +29,29 @@ class App extends Component {
 				<div>
 					<span>尺寸</span>
 					{sizes.map((size) => (
-						<Button size={size}>
-							{size}
-						</Button>
+						<Button size={size}>{size}</Button>
 					))}
-                    <Button width="300" height="60">通过width和height控制具体尺寸</Button>
+					<Button width="300" height="60">
+						通过width和height控制具体尺寸
+					</Button>
 				</div>
-                <div>
+				<div>
 					<span>禁用</span>
 					{types.map((type) => (
 						<Button type={type} disabled>
 							{type}
 						</Button>
 					))}
-                    <Button width="300" height="60">通过width和height控制具体尺寸</Button>
+					<Button width="300" height="60">
+						通过width和height控制具体尺寸
+					</Button>
 				</div>
-                <div>
+				<div>
 					<span>导航守卫</span>
-                    <Button>URL导航</Button>
-                    <Button>路由导航</Button>
+					<Button>URL导航</Button>
+					<Button>路由导航</Button>
 				</div>
+				<Button block>块级按钮 block</Button>
 				<div>
 					<span>自定义颜色：</span>
 					{colors.map((color) => (
@@ -68,7 +71,37 @@ class App extends Component {
 						</Button>
 					))}
 				</div>
-
+				<div>
+					<span>图标</span>
+					<Button icon="wifi" iconRight="wifi">
+						图标按钮
+					</Button>
+					<Button icon="wifi"></Button>
+				</div>
+				<div>
+					<span>圆角</span>
+					<Button>圆角按钮</Button>
+					<Button round="no">圆角按钮</Button>
+					<Button round="xl">圆角按钮</Button>
+					<Button round="lg">圆角按钮</Button>
+					<Button round="md">圆角按钮</Button>
+					<Button round="sm">圆角按钮</Button>
+					<Button round="xs">圆角按钮</Button>
+					<Button round="pill">圆角按钮</Button>
+					<Button round="circle">圆角按钮</Button>
+				</div>
+				<div>
+					<span>细边框</span>
+					<Button hollow round="no">圆角按钮</Button>
+					<Button hollow round="xl">圆角按钮</Button>
+					<Button hollow round="lg">圆角按钮</Button>
+					<Button hollow round="md">圆角按钮</Button>
+					<Button hollow round="sm">圆角按钮</Button>
+					<Button hollow round="xs">圆角按钮</Button>
+					<Button hollow round="pill">圆角按钮</Button>
+					<Button hollow round="circle">圆角按钮</Button>
+				</div>
+                <Button round="lg">圆角按钮</Button>
 				<Fab></Fab>
 			</div>
 		);

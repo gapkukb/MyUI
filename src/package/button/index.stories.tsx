@@ -32,6 +32,7 @@ export const IconColor = () => {
 	};
 	return (
 		<>
+            
 			{factory()}
 			{factory({ disabled: true })}
 			{factory({ icon: "bars", href: "", round: true })}

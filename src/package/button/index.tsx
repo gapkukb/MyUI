@@ -5,15 +5,13 @@ import "./index.styl";
 import { fixUnit } from "../../util/unit";
 import Icon from "../icon";
 import Progress, { LodingProps } from "../loading";
-export const buttonConfig = {
-    
-};
+export const buttonConfig = {};
 export type ButtonProps = AnchorHTMLAttributes<HTMLElement> &
 	Omit<ButtonHTMLAttributes<HTMLElement>, "type"> &
 	Partial<{
 		bgcolor: string;
 		block: boolean;
-		circle: boolean;
+		square: boolean;
 		className: string;
 		color: string;
 		disabled: boolean;
@@ -27,14 +25,14 @@ export type ButtonProps = AnchorHTMLAttributes<HTMLElement> &
 		label: string;
 		loading: boolean;
 		loadingIcon: LodingProps["type"];
-		nativeType: "button" | "submit" | "reset" | "image";
+		nativeType: "button" | "submit" | "reset";
 		hollow: boolean;
 		replace: boolean;
-		round: Spacing | "round" | "circle";
+		round: Spacing | "pill" | "circle";
 		size: "normal" | "large" | "small" | "mini";
 		style: CSSProperties;
 		to: string;
-		type: "primary" | "danger" | "default" | "success" | "info" | "warning" | "dark" | "light";
+		type: "primary" | "danger" | "default" | "success" | "info" | "warning" | "dark" | "light" | "link";
 		link: boolean;
 		borderless: boolean;
 		width: Numeric;
@@ -44,8 +42,8 @@ export type ButtonProps = AnchorHTMLAttributes<HTMLElement> &
 export const Button: FC<ButtonProps> = ({
 	bgcolor,
 	block,
+	square,
 	children,
-	circle,
 	className,
 	color,
 	disabled,
@@ -74,19 +72,19 @@ export const Button: FC<ButtonProps> = ({
 }: ButtonProps) => {
 	const Tag = to !== undefined ? "link" : href !== undefined ? "a" : "button";
 	const isButtonNode = Tag === "button";
-	const _bgcolor = bgcolor?.split(",");
 
 	const props: Record<any, any> = {
 		className: classnames("button", type, size, className, {
 			disabled: !isButtonNode && disabled,
 			harline,
+			square,
 			["rounded--" + round]: round,
+			["hairline--" + round]: round,
 			block,
 			hollow,
 			solid: !hollow,
-			circle,
 			loading,
-			borderless,
+            borderless,
 		}),
 		style: Object.assign(
 			{
