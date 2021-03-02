@@ -79,12 +79,11 @@ export const Button: FC<ButtonProps> = ({
 			harline,
 			square,
 			["rounded--" + round]: round,
-			["hairline--" + round]: round,
+			["hairline"]: round,
 			block,
 			hollow,
-			solid: !hollow,
 			loading,
-            borderless,
+			borderless,
 		}),
 		style: Object.assign(
 			{

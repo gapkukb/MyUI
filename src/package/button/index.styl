@@ -26,18 +26,18 @@ $colors = $vars.colors
     appearance button
     -webkit-text-fill-color #fff
 
-    @media ( -webkit-min-device-pixel-ratio 1 )
-        @supports not ( border-widt 0.5px )
+    @media ( -webkit-min-device-pixel-ratio 2 )
+        @supports not ( border-width 0.5px )
             &
                 border-width 0
 
             &:before
-                content ""
                 top -50%
                 right -50%
                 bottom -50%
                 left -50%
                 border 1px solid
+                content ""
                 transform scale( 0.5 )
 
     &:before
@@ -70,7 +70,7 @@ $colors = $vars.colors
 
     &:not(:disabled):not(.disabled)
         &:hover:after
-            opacity 0.1
+            opacity 0.2
 
         &:active:after
             background-color #000
@@ -106,35 +106,35 @@ $colors = $vars.colors
         padding 0
 
     &.default
-        color $colors.gray
+        color: $colors.gray
 
     &.primary
-        color $colors.blue
+        color: $colors.blue
 
     &.danger
-        color $colors.red
+        color: $colors.red
 
     &.success
-        color $colors.green
+        color: $colors.green
 
     &.info
-        color $colors.cyan
+        color: $colors.cyan
 
     &.warning
-        color $colors.amber
+        color: $colors.amber
 
     &.link
         border-color transparent
         background none
-        color $colors.blue
+        color: $colors.blue
         text-decoration underline
 
     &.dark
-        color $colors.black
+        color: $colors.black
 
     &.light
-        color $colors.gray-light
-        -webkit-text-fill-color $colors.black
+        color: $colors.gray-light
+        -webkit-text-fill-color: $colors.black
 
     &.hollow
         background none

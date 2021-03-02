@@ -30,6 +30,9 @@ $direction( px )
             border-radius $value
             $direction $value
 
+            &.hairline:before
+                border-radius $item
+
     &--pill
         border-radius 999px
         $direction 999px
@@ -40,9 +43,6 @@ $direction( px )
 
 .border
     border 0.5px solid
-
-    &--dashed
-        border-style dashed
 
     &--dotted
         border-style dotted

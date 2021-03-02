@@ -92,17 +92,38 @@ class App extends Component {
 				</div>
 				<div>
 					<span>细边框</span>
-					<Button hollow round="no">圆角按钮</Button>
-					<Button hollow round="xl">圆角按钮</Button>
-					<Button hollow round="lg">圆角按钮</Button>
-					<Button hollow round="md">圆角按钮</Button>
-					<Button hollow round="sm">圆角按钮</Button>
-					<Button hollow round="xs">圆角按钮</Button>
-					<Button hollow round="pill">圆角按钮</Button>
-					<Button hollow round="circle">圆角按钮</Button>
+					<Button hollow round="no">
+						圆角按钮
+					</Button>
+					<Button hollow round="xl">
+						圆角按钮
+					</Button>
+					<Button hollow round="lg">
+						圆角按钮
+					</Button>
+					<Button hollow round="md">
+						圆角按钮
+					</Button>
+					<Button hollow round="sm">
+						圆角按钮
+					</Button>
+					<Button hollow round="xs">
+						圆角按钮
+					</Button>
+					<Button hollow round="pill">
+						圆角按钮
+					</Button>
+					<Button hollow round="circle">
+						圆角按钮
+					</Button>
 				</div>
-                <Button round="lg">圆角按钮</Button>
-				<Fab></Fab>
+
+				<Fab type="arc" control={<Button round="circle" square icon="wifi" size="large"></Button>}>
+					<Button round="circle" square icon="wifi"></Button>
+					<Button round="circle" square icon="wifi"></Button>
+					<Button round="circle" square icon="wifi"></Button>
+					<Button round="circle" square icon="wifi"></Button>
+				</Fab>
 			</div>
 		);
 	}
