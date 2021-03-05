@@ -118,7 +118,7 @@ class App extends Component {
 					</Button>
 				</div>
 
-				<Fab type="arc" control={<Button round="circle" square icon="wifi" size="large"></Button>}>
+				<Fab type="horizontal" control={<Button round="circle" square icon="wifi" size="large"></Button>}>
 					<Button round="circle" square icon="wifi"></Button>
 					<Button round="circle" square icon="wifi"></Button>
 					<Button round="circle" square icon="wifi"></Button>
