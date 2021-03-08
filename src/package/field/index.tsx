@@ -1,12 +1,24 @@
-import { FC, CSSProperties, ReactNode, HTMLAttributes, useState, FormEvent, InputHTMLAttributes, useRef } from "react";
+import {
+	FC,
+	CSSProperties,
+	ReactNode,
+	HTMLAttributes,
+	useState,
+	FormEvent,
+	InputHTMLAttributes,
+	useRef,
+	useEffect,
+} from "react";
 import classnames from "classnames";
 import "./index.styl";
 import Icon from "../icon";
 import { fixUnit } from "../../util/unit";
 import { nope } from "../../util";
+import { preventDefault } from "../../util/dom";
 type Align = "left" | "right" | "center";
 export type FieldProps = Partial<{
 	value: string;
+	autosize: boolean;
 	autoFocus: boolean;
 	border: boolean;
 	button: ReactNode;
@@ -31,16 +43,17 @@ export type FieldProps = Partial<{
 	onChange: (e: FormEvent<HTMLInputElement>) => void;
 	onClear: (el: HTMLInputElement) => void;
 	onFocus: (e: FormEvent<HTMLInputElement>) => void;
+	onEnter: (e: FormEvent<HTMLInputElement>) => void;
 	onClick: (e: MouseEvent) => void;
 	onIconClick: (e: MouseEvent) => void;
 	onInputClick: (e: MouseEvent) => void;
-	onLeftIconClick: (e: MouseEvent) => void;
 	onRightIconClick: (e: MouseEvent) => void;
 	placeholder: string;
 	prefix: ReactNode;
 	readOnly: boolean;
 	required: boolean;
 	rightIcon: ReactNode;
+	rows: Numeric;
 	showLimit: boolean;
 	size: "small" | "normal" | "large";
 	style: CSSProperties;
@@ -52,6 +65,7 @@ export type FieldProps = Partial<{
 export const Field = ({
 	value = "",
 	autoFocus,
+	autosize = true,
 	border = true,
 	button,
 	center,
@@ -72,19 +86,20 @@ export const Field = ({
 	messageAlign = "left",
 	name,
 	onBlur = nope,
-	onChange = nope,
-	onClear = nope,
-	onClick = nope,
-	onFocus = nope,
-	onIconClick = nope,
-	onInputClick = nope,
-	onLeftIconClick = nope,
-	onRightIconClick = nope,
+	onChange,
+	onClear,
+	onClick,
+	onFocus,
+	onIconClick,
+	onInputClick,
+	onRightIconClick,
+	onEnter = nope,
 	placeholder,
 	prefix,
 	readOnly,
 	required,
 	rightIcon,
+	rows = 1,
 	showLimit,
 	size = "normal",
 	style,
@@ -93,16 +108,16 @@ export const Field = ({
 	type = "text",
 }: FieldProps) => {
 	const [focus, setFocus] = useState(false);
-	const [model, setModel] = useState(value);
+	const [model, setModel] = useState("");
 	const fieldRef = useRef<HTMLInputElement>(null);
+	let composition = false;
+
+	useEffect(function () {
+		fieldRef.current!.value = value;
+	}, []);
 
 	function changeHandler(e: FormEvent<HTMLInputElement>) {
-		const inputValue = e.currentTarget.value;
-		if (formatter(inputValue)) {
-			if (!maxLength) return onChange?.(e);
-			else if ((inputValue && inputValue.length < maxLength) || value.length < maxLength) {
-			}
-		}
+		setModel(e.currentTarget.value);
 	}
 	function blurHandler(e: FormEvent<HTMLInputElement>) {
 		const inputValue = e.currentTarget.value;
@@ -129,28 +144,38 @@ export const Field = ({
 		}
 	}
 	function inputHandler(e: FormEvent<HTMLInputElement>) {
-        const value = e.currentTarget.value;
-        
+		if (composition) return;
+		const value = e.currentTarget.value;
+		console.log(value);
 		setModel(value);
+	}
+	function compositionHandler(e: FormEvent<HTMLInputElement>) {
+		if (e.type === "compositionend") {
+			composition = false;
+			// inputHandler(e);
+		} else {
+			composition = true;
+		}
 	}
 	function clearHandler(e: FormEvent<HTMLInputElement>) {
 		fieldRef.current!.value = "";
 		fieldRef.current!.focus();
 		setModel("");
-		onClear(fieldRef.current!);
+		onClear && onClear(fieldRef.current!);
+	}
+	function keyUpHandler(e: KeyboardEvent) {
+		if (type !== "textarea") {
+			if (e.keyCode === 13 || e.key.toLowerCase() === "enter") {
+				preventDefault(e);
+				onEnter(e.currentTarget as any);
+			}
+		}
 	}
 
-	const props = {
-		className: classnames("field", size, { center: center || button }),
-		style: {
-			...style,
-		},
-	};
 	const labelProps = {};
 	const inputProps = {
 		type,
 		className: classnames("field__value", inputAlign),
-		value: value || undefined,
 		placeholder,
 		disabled,
 		readOnly,
@@ -163,6 +188,9 @@ export const Field = ({
 		onFocus: focusHandler,
 		onInput: inputHandler,
 		onClick: inputClickHandler,
+		onCompositionStart: compositionHandler,
+		onCompositionEnd: compositionHandler,
+		onKeyUp: keyUpHandler,
 	};
 	if (type === "integer") {
 		Object.assign(inputProps, {
@@ -177,10 +205,11 @@ export const Field = ({
 	}
 	const Tag = type === "textarea" ? "textarea" : ("input" as any);
 
-	function genIcon(input: typeof icon, classname: string, handler: Function) {
+	function genIcon(input: typeof icon, classname: string, handler?: Function) {
 		if (!icon) return undefined;
+
 		const props = {
-			className: classnames("field__icon", "field__icon--" + classname),
+			className: classnames("field__icon", "field__icon--" + classname, { field__click: handler }),
 			onClick: handler,
 		} as any;
 		return (
@@ -199,20 +228,35 @@ export const Field = ({
 			);
 		return icon;
 	}
+
 	return (
-		<div {...props}>
-			{genIcon(icon, "left", onLeftIconClick)}
-			{genLabel()}
-			{colon && <div className="field__colon">：</div>}
+		<div className={classnames("field", { disabled })}>
 			<div className="field__body">
+				{genIcon(icon, "left", onIconClick)}
+				{genLabel()}
+				{colon && <div className="field__colon">：</div>}
 				<div className="field__main">
-					<Tag {...inputProps} />
+					{prefix && <div className="field__prfix">{prefix}</div>}
+					{type === "textarea" ? (
+						<textarea {...(inputProps as any)} rows={autosize ? 1 : rows}></textarea>
+					) : (
+						<input {...(inputProps as any)} />
+					)}
+					{suffix && <div className="field__suffix">{suffix}</div>}
 					{clearable && model && genIcon("times-circle", "clear", clearHandler)}
 					{button && <div className="field__button">{button}</div>}
 					{genIcon(rightIcon, "right", onRightIconClick)}
 				</div>
+			</div>
+			<div className="field__helper">
 				{error && <div className={classnames("field__message error", messageAlign)}>{error}</div>}
 				{success && <div className={classnames("field__message success", messageAlign)}>{success}</div>}
+				{maxLength && showLimit && (
+					<div className={classnames("field__limit")}>
+						<span className="field__curlength">1</span>
+						<span className="field__maxlength">/{maxLength}</span>
+					</div>
+				)}
 			</div>
 		</div>
 	);

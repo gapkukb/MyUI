@@ -181,3 +181,12 @@ export function setStyle(node: HTMLElement, style: CSSProperties) {
 		else css[key as any] = (style as any)[key];
 	}
 }
+export function stopPropagation(e: Event) {
+	e.stopPropagation();
+}
+export function preventDefault(e: Event, isStopPropagation?: boolean) {
+	if (typeof e.cancelable !== "boolean" || e.cancelable) {
+		e.preventDefault();
+	}
+	if (isStopPropagation) stopPropagation(e);
+}

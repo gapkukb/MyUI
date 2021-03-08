@@ -14,3 +14,8 @@ export function getChildren(children: ReactNode, filter?: (node: ReactNode) => b
 		{ childNodes: [], slots: {} }
 	);
 }
+
+export function slot(input: ReactNode | undefined, standby: ReactNode): ReactNode {
+	if (typeof input === "string") return standby;
+	return input;
+}

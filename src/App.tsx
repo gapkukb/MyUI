@@ -4,18 +4,28 @@ import Field from "./package/field";
 import Icon from "./package/icon";
 
 class App extends Component {
+	state = {
+		model: "外部传进来的值",
+	};
 	render() {
 		return (
 			<div>
+				{/* <div>{this.state.model}</div> */}
 				<Field
-                    colon
+					colon
+					prefix="http://"
+					suffix="@gmail.com"
+					showLimit
+					value={this.state.model}
 					placeholder="完整结构"
 					type="text"
 					icon={<Icon name="phone"></Icon>}
+					onIconClick={() => {}}
 					rightIcon="wifi"
-                    label="完整结构"
-                    labelAlign="right"
-                    // error="错误信息"
+					label="总览"
+					labelAlign="right"
+					error="错误信息错误信息错误信息错误信息错误信息错误信息错误信息错误信息错误信息错误信息错误信息"
+					maxLength="20"
 					button={<Button size="small">按钮</Button>}
 				></Field>
 				<Field colon label="请输入任意字符 :" placeholder="请输入任意字符" type="text" maxLength="6"></Field>
@@ -26,7 +36,15 @@ class App extends Component {
 				<Field colon label="请输入url地址 :" placeholder="请输入url地址" type="url" maxLength="6"></Field>
 				<Field colon label="请输入电话 :" placeholder="请输入电话" type="tel" maxLength="6"></Field>
 				<Field colon label="请输入密码 :" placeholder="请输入密码" type="password" maxLength="6"></Field>
-				<Field colon label="文本输入域 :" placeholder="文本输入域" type="textarea" maxLength="6"></Field>
+				<Field
+					disabled
+					colon
+					label="文本输入域 :"
+					placeholder="文本输入域"
+					type="textarea"
+					rows="2"
+					showLimit
+				></Field>
 			</div>
 		);
 	}

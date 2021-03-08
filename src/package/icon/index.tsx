@@ -1,5 +1,5 @@
 import React from "react";
-import { BEM, classnames } from "../../util/bem";
+import classnames from "classnames";
 import { fixUnit } from "../../util/unit";
 import "../../fontawesome/css/all.css";
 import "./index.styl";
@@ -27,13 +27,17 @@ export function Icon({
 	color,
 	onClick,
 	className,
-	...props
+	...rest
 }: IconProps): JSX.Element {
+	console.log(onClick);
+
 	const isImg = name.includes(".");
 	const Tag = tag as any;
-	const attrs = {
-		...props,
-		className: classnames("icon", brand ? "fab" : family, prefix + name, className),
+	const props = {
+		...rest,
+		className: classnames("icon", brand ? "fab" : family, prefix + name, className, {
+			clickable: onClick,
+		}),
 		style: {
 			fontSize: fixUnit(size),
 			color,
@@ -41,7 +45,7 @@ export function Icon({
 	};
 
 	return (
-		<Tag {...attrs} aria-hidden="true">
+		<Tag {...props} aria-hidden="true">
 			{isImg && <img className="icon__img" src={name} alt="" />}
 			{badge && <b className="icon__badge">{badge}</b>}
 		</Tag>
