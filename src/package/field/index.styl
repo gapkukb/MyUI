@@ -1,2 +1,89 @@
 .field
-	display:flex
+    position relative
+    display flex
+    overflow hidden
+    box-sizing border-box
+    padding 10px 16px
+    width 100%
+    background-color #fff
+    line-height 24px
+
+    &.center
+        align-items center
+
+    &.normal
+        // height 40px
+        font-size 14px
+
+    &__icon
+        display block
+        flex-shrink 0
+        margin -8px
+        padding 8px
+        color #999
+        // font-size 16px
+        line-height inherit
+
+        &--clear
+            margin-left 0
+
+        &--left
+            margin-right 0
+
+        &--right
+            margin-left 0
+
+    &__label
+        flex none
+        box-sizing border-box
+        margin-right 12px
+        word-wrap break-word
+        width 8em
+    .left
+        text-align left
+
+    .center
+        text-align center
+
+    .right
+        text-align right
+
+    
+
+    &__body
+        position relative
+        flex 1
+        overflow visible
+        vertical-align middle
+        word-wrap break-word
+
+    &__main
+        display flex
+        align-items center
+
+    &__value
+        flex 1
+        box-sizing border-box
+        margin 0
+        padding 0
+        width 0
+        outline 0
+        border 0
+        background none
+        color inherit
+        font inherit
+        resize none
+
+    &__button
+        flex-shrink 0
+        padding-left 8px
+
+    &__message
+        text-align left
+        font-size 12px
+
+        &.error
+            color #ee0a24
+
+        &.success
+            color green
