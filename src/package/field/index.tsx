@@ -8,6 +8,7 @@ import {
 	InputHTMLAttributes,
 	useRef,
 	useEffect,
+	KeyboardEvent,
 } from "react";
 import classnames from "classnames";
 import "./index.styl";
@@ -15,7 +16,9 @@ import Icon from "../icon";
 import { fixUnit } from "../../util/unit";
 import { nope } from "../../util";
 import { preventDefault } from "../../util/dom";
+
 type Align = "left" | "right" | "center";
+
 export type FieldProps = Partial<{
 	value: string;
 	autosize: boolean;
@@ -29,7 +32,7 @@ export type FieldProps = Partial<{
 	defaultValue: string;
 	disabled: boolean;
 	error: ReactNode;
-	formatter: Function;
+	formatter: (input: string) => string;
 	icon: ReactNode;
 	id: string;
 	inputAlign: Align;
@@ -41,18 +44,21 @@ export type FieldProps = Partial<{
 	messageAlign: Align;
 	name: string;
 	onBlur: (e: FormEvent<HTMLInputElement>) => void;
+	onInput: (e: FormEvent<HTMLInputElement>) => void;
 	onChange: (e: FormEvent<HTMLInputElement>) => void;
 	onClear: (el: HTMLInputElement) => void;
 	onFocus: (e: FormEvent<HTMLInputElement>) => void;
-	onEnter: (e: FormEvent<HTMLInputElement>) => void;
 	onClick: (e: MouseEvent) => void;
 	onIconClick: (e: MouseEvent) => void;
 	onInputClick: (e: MouseEvent) => void;
 	onRightIconClick: (e: MouseEvent) => void;
+	onKeyPress: (e: KeyboardEvent<HTMLInputElement>) => void;
+	onEnter: (e: KeyboardEvent<HTMLInputElement>) => void;
 	placeholder: string;
 	prefix: ReactNode;
 	readOnly: boolean;
 	required: boolean;
+	resizable: boolean;
 	rightIcon: ReactNode;
 	rows: Numeric;
 	showLimit: boolean;
@@ -61,10 +67,14 @@ export type FieldProps = Partial<{
 	success: ReactNode;
 	suffix: ReactNode;
 	type: "text" | "number" | "integer" | "tel" | "email" | "password" | "url" | "search" | "textarea";
+	trim: boolean;
+	negative: boolean;
+	trigger: "onchange" | "oninput";
 	width: Numeric;
 	height: Numeric;
+	number: boolean;
 }>;
-
+const inputEvent = new Event("input", { bubbles: true });
 export const Field = ({
 	value = "",
 	autoFocus,
@@ -78,7 +88,7 @@ export const Field = ({
 	defaultValue = "",
 	disabled,
 	error,
-	formatter = () => true,
+	formatter,
 	icon,
 	id,
 	inputAlign = "left",
@@ -89,7 +99,8 @@ export const Field = ({
 	maxLength,
 	messageAlign = "left",
 	name,
-	onBlur = nope,
+	onInput,
+	onBlur,
 	onChange,
 	onClear,
 	onClick,
@@ -97,10 +108,12 @@ export const Field = ({
 	onIconClick,
 	onInputClick,
 	onRightIconClick,
-	onEnter = nope,
+	onKeyPress,
+	onEnter,
 	placeholder,
 	prefix,
 	readOnly,
+	resizable,
 	required,
 	rightIcon,
 	rows = 1,
@@ -110,80 +123,63 @@ export const Field = ({
 	success,
 	suffix,
 	type = "text",
+	trim = true,
+	trigger = "onchange",
 	width,
+	negative,
 	height,
+	number = true,
 }: FieldProps) => {
 	const [focus, setFocus] = useState(false);
 	const [model, setModel] = useState("");
 	const fieldRef = useRef<HTMLInputElement>(null);
 	let composition = false;
-	console.log(`rerender`, composition);
-
-	useEffect(function () {
-		fieldRef.current!.value = value;
-	}, []);
-
-	function changeHandler(e: FormEvent<HTMLInputElement>) {
-		setModel(e.currentTarget.value);
-	}
-	function blurHandler(e: FormEvent<HTMLInputElement>) {
-		const inputValue = e.currentTarget.value;
-		if (formatter(inputValue)) {
-			if (!maxLength) return onChange?.(e);
-			else if ((inputValue && inputValue.length < maxLength) || value.length < maxLength) {
-			}
+	function updateValue(value: string, _trigger: typeof trigger = "onchange") {
+		if (type === "integer" || type === "number") {
+			value = formatNumber(value, type === "number", negative);
 		}
-	}
-	function focusHandler(e: FormEvent<HTMLInputElement>) {
-		setFocus(true);
-		const inputValue = e.currentTarget.value;
-		if (formatter(inputValue)) {
-			if (!maxLength) return onChange?.(e);
-			else if ((inputValue && inputValue.length < maxLength) || value.length < maxLength) {
-			}
+		if (formatter && trigger === _trigger) {
+			value = formatter(value);
 		}
+		const el = fieldRef.current!;
+		if (el.value !== value) el.value = value;
 	}
-	function inputClickHandler(e: FormEvent<HTMLInputElement>) {
-		const inputValue = e.currentTarget.value;
-		if (formatter(inputValue)) {
-			if (!maxLength) return onChange?.(e);
-			else if ((inputValue && inputValue.length < maxLength) || value.length < maxLength) {
-			}
-		}
-	}
-	function inputHandler(e: FormEvent<HTMLInputElement>) {
+	function handlerChange(e: FormEvent<HTMLInputElement>) {}
+	function handleBlur(e: FormEvent<HTMLInputElement>) {}
+	function handleFocus(e: FormEvent<HTMLInputElement>) {}
+	function handleInputClick(e: FormEvent<HTMLInputElement>) {}
+	function handlerInput(e: FormEvent<HTMLInputElement>) {
 		if (composition) return;
-		const value = e.currentTarget.value;
-		console.log(value);
-		setModel(value);
+		let value = e.currentTarget.value;
+		if (trim) value = value.trim();
+		updateValue(e.currentTarget.value);
 	}
-	function compositionHandler(e: FormEvent<HTMLInputElement>) {
-		if (e.type === "compositionend") {
-			composition = false;
-			// inputHandler(e);
-		} else {
-			composition = true;
-		}
+	function handleComposition(e: FormEvent<HTMLInputElement>) {
+		composition = e.type !== "compositionend";
+		!composition && handlerInput(e);
 	}
-	function clearHandler(e: FormEvent<HTMLInputElement>) {
-		fieldRef.current!.value = "";
-		fieldRef.current!.focus();
-		setModel("");
-		onClear && onClear(fieldRef.current!);
+	function handleClear(e: FormEvent<HTMLInputElement>) {
+		const el = fieldRef.current!;
+		el.value = "";
+		el.focus();
+		el.dispatchEvent(inputEvent);
+		call(onClear, el);
 	}
-	function keyUpHandler(e: KeyboardEvent) {
-		if (type !== "textarea") {
-			if (e.keyCode === 13 || e.key.toLowerCase() === "enter") {
-				preventDefault(e);
-				onEnter(e.currentTarget as any);
+	function handleKeyPress(e: KeyboardEvent<HTMLInputElement>) {
+		if (e.charCode === 13 || e.key.toLowerCase() === "enter") {
+			if (type !== "textarea") {
+				e.preventDefault();
+				call(onEnter, e);
 			}
+			if (type === "search") e.currentTarget.blur();
 		}
+		call(onKeyPress, e);
 	}
 
 	const labelProps = {};
 	const inputProps = {
 		type,
-		className: classnames("field__value", inputAlign),
+		className: classnames("field__value", inputAlign, resizable),
 		placeholder,
 		disabled,
 		readOnly,
@@ -193,14 +189,14 @@ export const Field = ({
 		id,
 		autoFocus: autoFocus,
 		ref: fieldRef,
-		onChange: changeHandler,
-		onBlur: blurHandler,
-		onFocus: focusHandler,
-		onInput: inputHandler,
-		onClick: inputClickHandler,
-		onCompositionStart: compositionHandler,
-		onCompositionEnd: compositionHandler,
-		onKeyUp: keyUpHandler,
+		onChange: handlerChange,
+		onBlur: handleBlur,
+		onFocus: handleFocus,
+		onInput: handlerInput,
+		onClick: handleInputClick,
+		onCompositionStart: handleComposition,
+		onCompositionEnd: handleComposition,
+		onKeyPress: handleKeyPress,
 	};
 	if (type === "integer") {
 		Object.assign(inputProps, {
@@ -249,11 +245,11 @@ export const Field = ({
 					{type === "textarea" ? (
 						<textarea {...(inputProps as any)} rows={autosize ? 1 : rows}></textarea>
 					) : (
-						<input {...(inputProps as any)} defaultValue="safd" />
+						<input {...(inputProps as any)} defaultValue={value} />
 					)}
 					{/* <div className="field__border"></div> */}
 					{suffix && <div className="field__suffix">{suffix}</div>}
-					{clearable && model && genIcon("times-circle", "clear", clearHandler)}
+					{clearable && genIcon("times-circle", "clear", handleClear)}
 					{genIcon(rightIcon, "right", onRightIconClick)}
 					{button && <div className="field__button">{button}</div>}
 				</div>
@@ -272,3 +268,25 @@ export const Field = ({
 	);
 };
 export default Field;
+
+const REG_FLOAT = /[^0-9.]/g;
+const REG_FLOAT_NEGATIVE = /[^-0-9.]/g;
+const REG_INT = /[^0-9]/g;
+const REG_INT_NEGATIVE = /[^-0-9]/g;
+
+function call<T extends (...args: any) => any>(f: T | undefined, ...args: Parameters<T>) {
+	f?.apply(f, args);
+}
+
+function formatNumber(value: string, float: boolean = true, negative: boolean = true) {
+	value = float ? trim(value, ".", /\./g) : value.split(".")[0];
+	value = negative ? trim(value, "-", /-/g) : value.replace(/-/, "");
+	const reg = float ? (negative ? REG_FLOAT_NEGATIVE : REG_FLOAT) : negative ? REG_INT_NEGATIVE : REG_INT;
+	return value.replace(reg, "");
+}
+function trim(value: string, char: string, regexp: RegExp): string {
+	const index = value.indexOf(char);
+	if (index === -1) return value;
+	if (char === "-" && index !== 0) return value.slice(0, index);
+	return value.slice(0, index + 1) + value.slice(index).replace(regexp, "");
+}
