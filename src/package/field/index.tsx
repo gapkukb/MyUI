@@ -2,7 +2,6 @@ import {
 	FC,
 	CSSProperties,
 	ReactNode,
-	HTMLAttributes,
 	useState,
 	FormEvent,
 	InputHTMLAttributes,
@@ -14,8 +13,8 @@ import classnames from "classnames";
 import "./index.styl";
 import Icon from "../icon";
 import { fixUnit } from "../../util/unit";
-import { nope } from "../../util";
 import { preventDefault } from "../../util/dom";
+import { call } from "../../util";
 
 type Align = "left" | "right" | "center";
 
@@ -69,14 +68,14 @@ export type FieldProps = Partial<{
 	type: "text" | "number" | "integer" | "tel" | "email" | "password" | "url" | "search" | "textarea";
 	trim: boolean;
 	negative: boolean;
-	trigger: "onchange" | "oninput";
+	trigger: "onchange" | "oninput" | "onblur";
 	width: Numeric;
 	height: Numeric;
 	number: boolean;
 }>;
 const inputEvent = new Event("input", { bubbles: true });
 export const Field = ({
-	value = "",
+	value,
 	autoFocus,
 	autosize = true,
 	bordered = true,
@@ -85,7 +84,7 @@ export const Field = ({
 	className,
 	clearable = true,
 	colon,
-	defaultValue = "",
+	defaultValue,
 	disabled,
 	error,
 	formatter,
@@ -144,9 +143,16 @@ export const Field = ({
 		const el = fieldRef.current!;
 		if (el.value !== value) el.value = value;
 	}
-	function handlerChange(e: FormEvent<HTMLInputElement>) {}
-	function handleBlur(e: FormEvent<HTMLInputElement>) {}
-	function handleFocus(e: FormEvent<HTMLInputElement>) {}
+	function handleBlur(e: FormEvent<HTMLInputElement>) {
+		setFocus(false);
+		updateValue(e.currentTarget.value, "onblur");
+		call(onBlur, e);
+	}
+	function handleFocus(e: FormEvent<HTMLInputElement>) {
+		setFocus(true);
+		call(onFocus, e);
+		if (readOnly) fieldRef.current!.blur();
+	}
 	function handleInputClick(e: FormEvent<HTMLInputElement>) {}
 	function handlerInput(e: FormEvent<HTMLInputElement>) {
 		if (composition) return;
@@ -159,6 +165,7 @@ export const Field = ({
 		!composition && handlerInput(e);
 	}
 	function handleClear(e: FormEvent<HTMLInputElement>) {
+		e.preventDefault();
 		const el = fieldRef.current!;
 		el.value = "";
 		el.focus();
@@ -176,8 +183,8 @@ export const Field = ({
 		call(onKeyPress, e);
 	}
 
-	const labelProps = {};
 	const inputProps = {
+		value,
 		type,
 		className: classnames("field__value", inputAlign, resizable),
 		placeholder,
@@ -189,11 +196,11 @@ export const Field = ({
 		id,
 		autoFocus: autoFocus,
 		ref: fieldRef,
-		onChange: handlerChange,
+		onChange,
 		onBlur: handleBlur,
 		onFocus: handleFocus,
 		onInput: handlerInput,
-		onClick: handleInputClick,
+		onClick: onInputClick,
 		onCompositionStart: handleComposition,
 		onCompositionEnd: handleComposition,
 		onKeyPress: handleKeyPress,
@@ -245,7 +252,7 @@ export const Field = ({
 					{type === "textarea" ? (
 						<textarea {...(inputProps as any)} rows={autosize ? 1 : rows}></textarea>
 					) : (
-						<input {...(inputProps as any)} defaultValue={value} />
+						<input {...(inputProps as any)} />
 					)}
 					{/* <div className="field__border"></div> */}
 					{suffix && <div className="field__suffix">{suffix}</div>}
@@ -273,14 +280,15 @@ const REG_FLOAT = /[^0-9.]/g;
 const REG_FLOAT_NEGATIVE = /[^-0-9.]/g;
 const REG_INT = /[^0-9]/g;
 const REG_INT_NEGATIVE = /[^-0-9]/g;
-
-function call<T extends (...args: any) => any>(f: T | undefined, ...args: Parameters<T>) {
-	f?.apply(f, args);
-}
+const REG_DOT = /\./g;
+const REG_MINUS = /-/g;
 
 function formatNumber(value: string, float: boolean = true, negative: boolean = true) {
-	value = float ? trim(value, ".", /\./g) : value.split(".")[0];
-	value = negative ? trim(value, "-", /-/g) : value.replace(/-/, "");
+	// 处理小数和小数点
+	value = float ? trim(value, ".", REG_DOT) : value.split(".")[0];
+	// 处理负号
+	value = negative ? trim(value, "-", REG_MINUS) : value.replace(REG_MINUS, "");
+	// 处理非数字
 	const reg = float ? (negative ? REG_FLOAT_NEGATIVE : REG_FLOAT) : negative ? REG_INT_NEGATIVE : REG_INT;
 	return value.replace(reg, "");
 }

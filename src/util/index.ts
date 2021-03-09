@@ -30,3 +30,7 @@ export const randomNumber = (min: number = Number.MIN_SAFE_INTEGER, max: number 
 	Math.random() * (max - min) + min;
 /** 指定范围的随机整数 */
 export const randomInt = (max: number) => randomNumber(0, max);
+/** 函数调用兼容undefined */
+export function call<T extends (...args: any) => any>(f: T | undefined, ...args: Parameters<T>) {
+	f?.apply(f, args);
+}
