@@ -16,7 +16,7 @@ class App extends Component {
 					prefix="http://"
 					suffix="@gmail.com"
 					showLimit
-					value={this.state.model}
+					defaultValue={this.state.model}
 					placeholder="完整结构"
 					type="text"
 					icon={<Icon name="phone"></Icon>}
@@ -24,6 +24,7 @@ class App extends Component {
 					rightIcon="wifi"
 					label="总览"
 					labelAlign="right"
+					bordered
 					error="错误信息错误信息错误信息错误信息错误信息错误信息错误信息错误信息错误信息错误信息错误信息"
 					maxLength="20"
 					button={<Button size="small">按钮</Button>}
@@ -45,6 +46,10 @@ class App extends Component {
 					rows="2"
 					showLimit
 				></Field>
+				<div>size</div>
+				<Field size="large" label="大号" placeholder="大号" type="text" maxLength="6"></Field>
+				<Field label="普通" placeholder="普通" type="text" maxLength="6"></Field>
+				<Field size="small" label="小号" placeholder="小号" type="text" maxLength="6"></Field>
 			</div>
 		);
 	}

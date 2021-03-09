@@ -20,12 +20,13 @@ export type FieldProps = Partial<{
 	value: string;
 	autosize: boolean;
 	autoFocus: boolean;
-	border: boolean;
+	bordered: boolean;
 	button: ReactNode;
 	center: boolean;
 	className: string;
 	clearable: boolean;
 	colon: boolean;
+	defaultValue: string;
 	disabled: boolean;
 	error: ReactNode;
 	formatter: Function;
@@ -60,18 +61,21 @@ export type FieldProps = Partial<{
 	success: ReactNode;
 	suffix: ReactNode;
 	type: "text" | "number" | "integer" | "tel" | "email" | "password" | "url" | "search" | "textarea";
+	width: Numeric;
+	height: Numeric;
 }>;
 
 export const Field = ({
 	value = "",
 	autoFocus,
 	autosize = true,
-	border = true,
+	bordered = true,
 	button,
 	center,
 	className,
 	clearable = true,
 	colon,
+	defaultValue = "",
 	disabled,
 	error,
 	formatter = () => true,
@@ -106,11 +110,14 @@ export const Field = ({
 	success,
 	suffix,
 	type = "text",
+	width,
+	height,
 }: FieldProps) => {
 	const [focus, setFocus] = useState(false);
 	const [model, setModel] = useState("");
 	const fieldRef = useRef<HTMLInputElement>(null);
 	let composition = false;
+	console.log(`rerender`, composition);
 
 	useEffect(function () {
 		fieldRef.current!.value = value;
@@ -128,6 +135,7 @@ export const Field = ({
 		}
 	}
 	function focusHandler(e: FormEvent<HTMLInputElement>) {
+		setFocus(true);
 		const inputValue = e.currentTarget.value;
 		if (formatter(inputValue)) {
 			if (!maxLength) return onChange?.(e);
@@ -179,8 +187,10 @@ export const Field = ({
 		placeholder,
 		disabled,
 		readOnly,
+		defaultValue,
 		maxLength: maxLength as number,
 		name,
+		id,
 		autoFocus: autoFocus,
 		ref: fieldRef,
 		onChange: changeHandler,
@@ -203,7 +213,6 @@ export const Field = ({
 			inputMode: "decimal",
 		});
 	}
-	const Tag = type === "textarea" ? "textarea" : ("input" as any);
 
 	function genIcon(input: typeof icon, classname: string, handler?: Function) {
 		if (!icon) return undefined;
@@ -230,8 +239,8 @@ export const Field = ({
 	}
 
 	return (
-		<div className={classnames("field", { disabled })}>
-			<div className="field__body">
+		<div className={classnames("field")} style={{ width: fixUnit(width) }}>
+			<div className={classnames("field__body", size, { disabled, focus, bordered })}>
 				{genIcon(icon, "left", onIconClick)}
 				{genLabel()}
 				{colon && <div className="field__colon">：</div>}
@@ -240,12 +249,13 @@ export const Field = ({
 					{type === "textarea" ? (
 						<textarea {...(inputProps as any)} rows={autosize ? 1 : rows}></textarea>
 					) : (
-						<input {...(inputProps as any)} />
+						<input {...(inputProps as any)} defaultValue="safd" />
 					)}
+					{/* <div className="field__border"></div> */}
 					{suffix && <div className="field__suffix">{suffix}</div>}
 					{clearable && model && genIcon("times-circle", "clear", clearHandler)}
-					{button && <div className="field__button">{button}</div>}
 					{genIcon(rightIcon, "right", onRightIconClick)}
+					{button && <div className="field__button">{button}</div>}
 				</div>
 			</div>
 			<div className="field__helper">

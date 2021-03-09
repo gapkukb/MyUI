@@ -29,8 +29,6 @@ export function Icon({
 	className,
 	...rest
 }: IconProps): JSX.Element {
-	console.log(onClick);
-
 	const isImg = name.includes(".");
 	const Tag = tag as any;
 	const props = {
