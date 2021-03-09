@@ -245,7 +245,7 @@ export const Field = ({
 				{genLabel()}
 				{colon && <div className="field__colon">：</div>}
 				<div className="field__main">
-					{prefix && <div className="field__prfix">{prefix}</div>}
+					{prefix && <div className="field__prefix">{prefix}</div>}
 					{type === "textarea" ? (
 						<textarea {...(inputProps as any)} rows={autosize ? 1 : rows}></textarea>
 					) : (
