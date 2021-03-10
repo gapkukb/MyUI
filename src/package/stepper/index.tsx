@@ -4,6 +4,7 @@ import "./index.styl";
 import { FieldProps } from "../field";
 import Button, { ButtonProps } from "../button";
 import { call, number } from "../../util";
+import { fixUnit } from "../../util/unit";
 export type StepperProps = Partial<{
 	/** 最小值，失去焦点时触发 */
 	min: Numeric;
@@ -42,7 +43,7 @@ export const Stepper: CFC<StepperProps> = ({
 	defaultValue,
 	readOnly,
 	placeholder,
-	step: _step = 1,
+	step = 1,
 	async,
 	editable,
 	showDecrease,
@@ -58,28 +59,56 @@ export const Stepper: CFC<StepperProps> = ({
 	onChange,
 	...rest
 }) => {
-    const step = number(_step)!;
 	const decimal = number(_decimal)!;
 	const [value, setValue] = useState(number(defaultValue));
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	const _disableDecrease = disabled || disableDecrease || ((value && min && value <= min) as boolean);
 	const _disableIncrease = disabled || disableIncrease || ((value && max && value >= max) as boolean);
+
 	function update(input: number | FormEvent<HTMLInputElement>) {
 		let output: number;
 		if (typeof input === "number") {
 			output = input;
 		} else {
-			output = input.currentTarget.valueAsNumber;
+			const el = input.currentTarget;
+			output = el.valueAsNumber;
 			if (input.type === "blur") {
-				if (max && output > max) output = Number(max);
-				else if (min && output < min) output = Number(min);
-				if (output) input.currentTarget.value = (output as unknown) as string;
+				if (max && output > max) {
+					output = Number(max);
+				} else if (min && output < min) {
+					output = Number(min);
+				}
+				el.value = "";
+				el.value = ((output as unknown) as string) || "";
+			} else {
+				if ((max && output > max) || (min && output < min)) {
+					return;
+				}
 			}
 		}
+		if (output === value) return;
 		setValue(output);
 		call(onChange, output);
 	}
+	function press(e: KeyboardEvent<HTMLInputElement>) {
+		const el = e.currentTarget;
+		const key = e.key;
+		const value = el.value;
+		const index = value.indexOf(".");
+		//  处理+ - . 三种符号和小数位
+		if (
+			key === "+" ||
+			(key === "0" && value === "") ||
+			(key === "." && (decimal === 0 || value === "")) ||
+			(key === "-" && ((min && min >= 0) || !el.validity.valid)) ||
+			(index !== -1 && value.substring(index).length > decimal)
+		) {
+			e.preventDefault();
+			return false;
+		}
+	}
+
 	function set(action: "stepDown" | "stepUp") {
 		const el = inputRef.current!;
 		el[action]();
@@ -87,42 +116,40 @@ export const Stepper: CFC<StepperProps> = ({
 	}
 	const decrease = set.bind(null, "stepDown");
 	const increase = set.bind(null, "stepUp");
-	function press(e: KeyboardEvent<HTMLInputElement>) {
-		const value = e.currentTarget.value;
-		//禁用小数点符号
-		if (e.key === ".") {
-            const index = value.indexOf(".");
-            console.log(index !== -1 , value.substring(index).length , decimal);
-            
-			if (decimal === 0) e.preventDefault();
-			else if (index !== -1 && value.substring(index).length > decimal) {
-				e.preventDefault();
-			}
-		} else if (e.key === "-") {
-		} else if (e.key === "." && e.currentTarget.valueAsNumber) {
-		}
-	}
 	return (
-		<div className="stepper">
-			<Button icon="wifi" size={buttonSize} disabled={_disableDecrease} onClick={decrease} />
+		<div className="stepper" style={{ width: fixUnit(width) }}>
+			<Button
+				borderless
+				round="no"
+				icon="wifi"
+				size={buttonSize}
+				disabled={_disableDecrease}
+				onClick={decrease}
+			/>
 			<input
 				className={classnames("stepper__value", align)}
 				type="number"
 				defaultValue={value}
-				// step={step}
-				// onChange={update}
-				// onBlur={update}
+				step={step}
+				onChange={update}
+				onBlur={update}
 				onKeyPress={press}
-				onInput={() => console.log(12)}
 				role="stepper"
 				ref={inputRef}
-				// min={min}
-				// max={max}
+				min={min}
+				max={max}
 				aria-valuemin={min as number}
 				aria-valuemax={max as number}
 				aria-valuenow={(value as unknown) as number}
 			/>
-			<Button icon="wifi" size={buttonSize} disabled={_disableIncrease} onClick={increase} />
+			<Button
+				borderless
+				round="no"
+				icon="wifi"
+				size={buttonSize}
+				disabled={_disableIncrease}
+				onClick={increase}
+			/>
 		</div>
 	);
 };

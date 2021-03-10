@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Stepper from "./package/stepper";
-
+function changed(num: number) {
+	console.log(num);
+}
 class App extends Component {
 	state = {
 		model: "外部传进来的值",
@@ -8,8 +10,8 @@ class App extends Component {
 	render() {
 		return (
 			<div>
-				<Stepper placeholder="小数" min="5" max="1000" step="0.1"></Stepper>
-				<Stepper placeholder="整数" min="5" max="1000" decimal="2"></Stepper>
+				<Stepper onChange={changed} placeholder="小数" min="-1" max="1000" step="0.1"></Stepper>
+				<Stepper onChange={changed} placeholder="整数" min="5" max="1000" decimal="2"></Stepper>
 			</div>
 		);
 	}
