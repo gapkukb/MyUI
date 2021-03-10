@@ -5,25 +5,39 @@ import { FieldProps } from "../field";
 import Button, { ButtonProps } from "../button";
 import { call, number } from "../../util";
 export type StepperProps = Partial<{
+	/** 最小值，失去焦点时触发 */
 	min: Numeric;
+	/** 最大值，失去焦点时触发 */
 	max: Numeric;
+	/** 步长 */
 	step: Numeric;
+	/** 小数位 */
+	decimal: Numeric;
+	/** 异步模式 */
 	async: boolean;
+	/** 可输入数字 */
 	editable: boolean;
+	/** 显示减少按钮 */
 	showDecrease: boolean;
+	/** 显示增加按钮 */
 	showIncrease: boolean;
+	/** 禁用减少按钮 */
 	disableDecrease: boolean;
+	/** 禁用增加按钮 */
 	disableIncrease: boolean;
-	integer: boolean;
+	/** 按钮大小 */
 	buttonSize: ButtonProps["size"];
+	/** 文字对齐 */
 	align: FieldProps["inputAlign"];
+	/** 回调函数 */
 	onChange: (output: number) => any;
 }> &
-	Pick<FieldProps, "width" | "defaultValue" | "disabled" | "readOnly" | "placeholder">;
+	Pick<FieldProps, "width" | "defaultValue" | "disabled" | "readOnly" | "placeholder" | "formatter" | "trigger">;
 
 export const Stepper: CFC<StepperProps> = ({
 	min,
 	max,
+	decimal: _decimal = 0,
 	width,
 	defaultValue,
 	readOnly,
@@ -41,11 +55,11 @@ export const Stepper: CFC<StepperProps> = ({
 	children,
 	buttonSize = "mini",
 	align = "center",
-	integer,
 	onChange,
 	...rest
 }) => {
-	const step = number(_step)!;
+    const step = number(_step)!;
+	const decimal = number(_decimal)!;
 	const [value, setValue] = useState(number(defaultValue));
 	const inputRef = useRef<HTMLInputElement>(null);
 
@@ -74,17 +88,19 @@ export const Stepper: CFC<StepperProps> = ({
 	const decrease = set.bind(null, "stepDown");
 	const increase = set.bind(null, "stepUp");
 	function press(e: KeyboardEvent<HTMLInputElement>) {
-		e.currentTarget.validity.valid || (e.currentTarget.value = e.currentTarget.value.replace(/\D+/g, ""));
-
-		// if (!e.currentTarget.validity.valid) e.preventDefault();
-		// if (e.key === "+") e.preventDefault();
-		// else if (e.key === ".") {
-		// 	if (integer || e.currentTarget.value.length === 0) e.preventDefault();
-		// } else if (e.key === "-") {
-		// }
-		// if (integer && e.key === ".") e.preventDefault();
-		// else if (e.key === "." && e.currentTarget.valueAsNumber) {
-		// }
+		const value = e.currentTarget.value;
+		//禁用小数点符号
+		if (e.key === ".") {
+            const index = value.indexOf(".");
+            console.log(index !== -1 , value.substring(index).length , decimal);
+            
+			if (decimal === 0) e.preventDefault();
+			else if (index !== -1 && value.substring(index).length > decimal) {
+				e.preventDefault();
+			}
+		} else if (e.key === "-") {
+		} else if (e.key === "." && e.currentTarget.valueAsNumber) {
+		}
 	}
 	return (
 		<div className="stepper">
@@ -96,7 +112,8 @@ export const Stepper: CFC<StepperProps> = ({
 				// step={step}
 				// onChange={update}
 				// onBlur={update}
-				onInput={press}
+				onKeyPress={press}
+				onInput={() => console.log(12)}
 				role="stepper"
 				ref={inputRef}
 				// min={min}

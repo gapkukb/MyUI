@@ -36,8 +36,8 @@ export function call<T extends (...args: any) => any>(f: T | undefined, ...args:
 }
 /** numeric to number and undefined */
 export function number(input?: Numeric, defaultValue?: number): number | undefined {
-	if (input === undefined) return defaultValue;
-	return Number(input) || panic("input must be a numeric type");
+    if (input === undefined) return defaultValue;
+	return Number(input) ?? panic("input must be a numeric type");
 }
 function panic(message: string): never {
 	throw new Error(message);
