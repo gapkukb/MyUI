@@ -8,8 +8,8 @@ class App extends Component {
 	render() {
 		return (
 			<div>
-				<Stepper placeholder="小数" min="5" max="10"></Stepper>
-				<Stepper placeholder="整数" min="5" max="10" integer></Stepper>
+				<Stepper placeholder="小数" min="5" max="1000"></Stepper>
+				<Stepper placeholder="整数" min="5" max="1000" integer></Stepper>
 			</div>
 		);
 	}

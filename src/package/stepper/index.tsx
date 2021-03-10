@@ -74,9 +74,17 @@ export const Stepper: CFC<StepperProps> = ({
 	const decrease = set.bind(null, "stepDown");
 	const increase = set.bind(null, "stepUp");
 	function press(e: KeyboardEvent<HTMLInputElement>) {
-		console.log(e.key, e.key === ".");
+		e.currentTarget.validity.valid || (e.currentTarget.value = e.currentTarget.value.replace(/\D+/g, ""));
 
-		if (e.key === ".") e.preventDefault();
+		// if (!e.currentTarget.validity.valid) e.preventDefault();
+		// if (e.key === "+") e.preventDefault();
+		// else if (e.key === ".") {
+		// 	if (integer || e.currentTarget.value.length === 0) e.preventDefault();
+		// } else if (e.key === "-") {
+		// }
+		// if (integer && e.key === ".") e.preventDefault();
+		// else if (e.key === "." && e.currentTarget.valueAsNumber) {
+		// }
 	}
 	return (
 		<div className="stepper">
@@ -85,14 +93,14 @@ export const Stepper: CFC<StepperProps> = ({
 				className={classnames("stepper__value", align)}
 				type="number"
 				defaultValue={value}
-				step={step}
-				onChange={update}
-				onBlur={update}
-				onKeyDown={integer ? press : undefined}
+				// step={step}
+				// onChange={update}
+				// onBlur={update}
+				onInput={press}
 				role="stepper"
 				ref={inputRef}
-				min={min}
-				max={max}
+				// min={min}
+				// max={max}
 				aria-valuemin={min as number}
 				aria-valuemax={max as number}
 				aria-valuenow={(value as unknown) as number}
