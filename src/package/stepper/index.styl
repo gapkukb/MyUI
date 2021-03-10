@@ -1,2 +1,15 @@
 .stepper
-	display:flex
+    display inline-flex
+
+    &__value
+        &::-webkit-outer-spin-button
+        &::-webkit-inner-spin-button
+            margin 0
+            -webkit-appearance none
+
+        &[type=number]
+            -moz-appearance textfield
+
+        for $item in left right center
+            &.{$item}
+                text-align $item

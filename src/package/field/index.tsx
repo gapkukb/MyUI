@@ -8,6 +8,7 @@ import {
 	useRef,
 	useEffect,
 	KeyboardEvent,
+	HTMLAttributes,
 } from "react";
 import classnames from "classnames";
 import "./index.styl";
@@ -25,7 +26,6 @@ export type FieldProps = Partial<{
 	bordered: boolean;
 	button: ReactNode;
 	center: boolean;
-	className: string;
 	clearable: boolean;
 	colon: boolean;
 	defaultValue: string;
@@ -62,7 +62,6 @@ export type FieldProps = Partial<{
 	rows: Numeric;
 	showLimit: boolean;
 	size: "small" | "normal" | "large";
-	style: CSSProperties;
 	success: ReactNode;
 	suffix: ReactNode;
 	type: "text" | "number" | "integer" | "tel" | "email" | "password" | "url" | "search" | "textarea";
@@ -74,7 +73,7 @@ export type FieldProps = Partial<{
 	number: boolean;
 }>;
 const inputEvent = new Event("input", { bubbles: true });
-export const Field = ({
+export const Field: CFC<FieldProps> = ({
 	value,
 	autoFocus,
 	autosize = true,
@@ -128,7 +127,8 @@ export const Field = ({
 	negative,
 	height,
 	number = true,
-}: FieldProps) => {
+	...rest
+}) => {
 	const [focus, setFocus] = useState(false);
 	const [model, setModel] = useState("");
 	const fieldRef = useRef<HTMLInputElement>(null);
@@ -204,6 +204,7 @@ export const Field = ({
 		onCompositionStart: handleComposition,
 		onCompositionEnd: handleComposition,
 		onKeyPress: handleKeyPress,
+		...rest,
 	};
 	if (type === "integer") {
 		Object.assign(inputProps, {
@@ -242,7 +243,7 @@ export const Field = ({
 	}
 
 	return (
-		<div className={classnames("field")} style={{ width: fixUnit(width) }}>
+		<div className={classnames("field", className)} style={{ width: fixUnit(width) }}>
 			<div className={classnames("field__body", size, { disabled, focus, bordered })}>
 				{genIcon(icon, "left", onIconClick)}
 				{genLabel()}

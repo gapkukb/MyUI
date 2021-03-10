@@ -1,3 +1,4 @@
+import { AriaAttributes, CSSProperties, FC } from "react";
 import { spacing as _spacing, colors } from "../json/vars.json";
 import { breapointEventData } from "./dom";
 
@@ -29,6 +30,16 @@ declare global {
 	interface WindowEventMap {
 		breakpointchange: CustomEvent<breapointEventData>;
 	}
+
+	type CFC<P = {}> = FC<
+		P &
+			Partial<{
+				className: string;
+				style: CSSProperties;
+				role: string;
+			}> &
+			AriaAttributes
+	>;
 }
 
 export const spacing = Object.keys(_spacing);

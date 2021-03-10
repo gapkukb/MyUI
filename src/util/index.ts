@@ -34,3 +34,11 @@ export const randomInt = (max: number) => randomNumber(0, max);
 export function call<T extends (...args: any) => any>(f: T | undefined, ...args: Parameters<T>) {
 	f?.apply(f, args);
 }
+/** numeric to number and undefined */
+export function number(input?: Numeric, defaultValue?: number): number | undefined {
+	if (input === undefined) return defaultValue;
+	return Number(input) || panic("input must be a numeric type");
+}
+function panic(message: string): never {
+	throw new Error(message);
+}
