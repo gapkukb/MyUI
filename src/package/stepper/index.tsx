@@ -54,6 +54,7 @@ export const Stepper: CFC<StepperProps> = ({
 	className,
 	style,
 	children,
+	formatter,
 	buttonSize = "mini",
 	align = "center",
 	onChange,
@@ -78,6 +79,9 @@ export const Stepper: CFC<StepperProps> = ({
 					output = Number(max);
 				} else if (min && output < min) {
 					output = Number(min);
+				}
+				if (formatter) {
+					output = formatter(output);
 				}
 				el.value = "";
 				el.value = ((output as unknown) as string) || "";
@@ -138,6 +142,7 @@ export const Stepper: CFC<StepperProps> = ({
 				ref={inputRef}
 				min={min}
 				max={max}
+				placeholder={placeholder}
 				aria-valuemin={min as number}
 				aria-valuemax={max as number}
 				aria-valuenow={(value as unknown) as number}

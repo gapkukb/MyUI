@@ -31,7 +31,7 @@ export type FieldProps = Partial<{
 	defaultValue: string;
 	disabled: boolean;
 	error: ReactNode;
-	formatter: (input: string) => string;
+	formatter: (input: Numeric) => any;
 	icon: ReactNode;
 	id: string;
 	inputAlign: Align;

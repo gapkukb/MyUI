@@ -3,7 +3,7 @@ import Button from "../button";
 import Icon from "../icon";
 import { Field, FieldProps } from "./index";
 
-function formatter(value: string) {
+function formatter(value: Numeric) {
 	return Number(value).toLocaleString();
 }
 const press: FieldProps["onKeyPress"] = (e) => {};
