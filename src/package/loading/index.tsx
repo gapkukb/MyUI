@@ -1,18 +1,12 @@
-import { BEM } from "../../util/bem";
-import { fixUnit } from "../../util/unit";
-import Icon from "../icon";
-const bem = new BEM("icon");
+import { ReactNode } from "react";
 
-export type LodingProps = Partial<{
-  type: "circle-notch" | "cog" | "spinner" | "sync" | "pulse" | "clock";
-  size: "1x" | "2x" | "3x" | "4x" | "5x";
-  text: string;
+export type LoadingProps = Partial<{
+	type: string;
+	text: ReactNode;
+	size: number;
 }>;
-export function Progress({ type = "pulse", text, size = "1x" }: LodingProps): JSX.Element {
-  if (type === "pulse") type = ("spinner fa-pulse fa-" + size) as any;
-  else type = `${type} fa-spin fa-${size}` as any;
-  return <Icon name={type} size={size}></Icon>;
-}
+export const Loading: CFC<LoadingProps> = ({ type, text, size = "1x" }) => {
+	return <div className="loading"></div>;
+};
 
-bem.displayName(Progress);
-export default Progress;
+export default Loading;
