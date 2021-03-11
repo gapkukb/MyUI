@@ -14,8 +14,8 @@ export type StepperProps = Partial<{
 	step: Numeric;
 	/** 小数位 */
 	decimal: Numeric;
-	/** 异步模式 */
-	async: boolean;
+	/** 异步函数,参数是需要设置的具体值,函参done的回参-false 不变,true正常变化 numeric 直接设置值 */
+	asyncFunc: (done: (ret: boolean | Numeric) => void, value?: Numeric) => void;
 	/** 可输入数字 */
 	editable: boolean;
 	/** 显示减少按钮 */
@@ -44,7 +44,7 @@ export const Stepper: CFC<StepperProps> = ({
 	readOnly,
 	placeholder,
 	step = 1,
-	async,
+	asyncFunc,
 	editable,
 	showDecrease,
 	showIncrease,
@@ -92,6 +92,9 @@ export const Stepper: CFC<StepperProps> = ({
 			}
 		}
 		if (output === value) return;
+		if (asyncFunc) {
+			// asyncFunc();
+		}
 		setValue(output);
 		call(onChange, output);
 	}
@@ -134,6 +137,7 @@ export const Stepper: CFC<StepperProps> = ({
 				className={classnames("stepper__value", align)}
 				type="number"
 				defaultValue={value}
+				readOnly={!editable}
 				step={step}
 				onChange={update}
 				onBlur={update}
