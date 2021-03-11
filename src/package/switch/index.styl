@@ -1,2 +1,64 @@
+@keyframes spin
+    to
+        transform rotate( 360deg )
+
+@keyframes spin2
+    0%
+        stroke-dasharray 1, 200
+        stroke-dashoffset 0
+
+    50%
+        stroke-dasharray 90, 150
+        stroke-dashoffset -40
+
+    100%
+        stroke-dasharray 90, 150
+        stroke-dashoffset -120
+
 .switch
-	display:flex
+    position relative
+    display inline-flex
+    box-sizing content-box
+    width 2em
+    height 1em
+    border 1px solid rgba( 0, 0, 0, 0.1 )
+    border-radius 1em
+    background-color currentColor
+    color #999
+    cursor pointer
+    transition background-color 0.3s
+
+    &.disabled
+        opacity 0.5
+        cursor not-allowed
+
+    &.large
+        font-size 28px
+
+    &.normal
+        font-size 24px
+
+    &.small
+        font-size 20px
+
+    &.mini
+        font-size 16px
+
+    &.active
+        color #1989fa
+
+        &>^[0]__circular
+            left calc( 100% - 1em )
+
+    &__loading
+        animation spin2 1.5s ease-in-out infinite
+        stroke currentColor
+        stroke-width 3
+        stroke-linecap round
+
+    &__circular
+        position absolute
+        top 0
+        left 0
+        transition left 300ms ease-out
+        animation spin 2s ease-in-out infinite
