@@ -4,7 +4,7 @@ import { BEM, classnames } from "../../util/bem";
 import "./index.styl";
 import { fixUnit } from "../../util/unit";
 import Icon from "../icon";
-import Progress, { LodingProps } from "../loading";
+import Loading, { LoadingProps } from "../loading";
 export const buttonConfig = {};
 export type ButtonProps = AnchorHTMLAttributes<HTMLElement> &
 	Omit<ButtonHTMLAttributes<HTMLElement>, "type"> &
@@ -24,7 +24,7 @@ export type ButtonProps = AnchorHTMLAttributes<HTMLElement> &
 		iconSlot: ReactNode;
 		label: string;
 		loading: boolean;
-		loadingIcon: LodingProps["type"];
+		loadingIcon: LoadingProps["type"];
 		nativeType: "button" | "submit" | "reset";
 		hollow: boolean;
 		replace: boolean;
@@ -105,7 +105,7 @@ export const Button: FC<ButtonProps> = ({
 	const innerClassname = classnames("button__text", { button__loading: loading });
 	return (
 		<Tag {...props} {...rest}>
-			{loading && <Progress type={loadingIcon} />}
+			{loading && <Loading type={loadingIcon} />}
 			{iconSlot || (icon && <Icon name={icon} className="button__text" />)}
 			{text && <span className={innerClassname}>{text}</span>}
 			{iconRightSlot || (iconRight && <Icon name={iconRight} className={innerClassname} />)}
