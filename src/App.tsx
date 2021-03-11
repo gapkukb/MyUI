@@ -1,13 +1,6 @@
 import React, { Component } from "react";
-import Stepper, { StepperProps } from "./package/stepper";
-import Switch, { SwitchProps } from "./package/switch";
-const before: SwitchProps["onBeforeChange"] = (done, state) => {
-	if (window.confirm(`是否切换`)) {
-		done(!state);
-	} else {
-		done();
-	}
-};
+import Loading from "./package/loading";
+
 class App extends Component {
 	state = {
 		model: "外部传进来的值",
@@ -15,15 +8,14 @@ class App extends Component {
 	render() {
 		return (
 			<>
-				<Switch></Switch>
-				<Switch active></Switch>
-				<Switch disabled></Switch>
-				<Switch loading></Switch>
-				<Switch size="large"></Switch>
-				<Switch size="normal"></Switch>
-				<Switch size="small"></Switch>
-				<Switch size="mini"></Switch>
-				<Switch inactiveColor="green" color="red"></Switch>
+				<Loading type="loading1"></Loading>
+				<Loading type="loading2"></Loading>
+				<Loading type="loading3"></Loading>
+				<Loading type="loading4"></Loading>
+				<Loading type="loading5"></Loading>
+				<Loading type="loading6"></Loading>
+				<Loading type="loading7"></Loading>
+				<Loading type="loading8"></Loading>
 			</>
 		);
 	}
