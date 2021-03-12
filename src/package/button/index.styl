@@ -21,10 +21,9 @@ $colors = $vars.colors
     font inherit
     line-height 1
     cursor pointer
-    transition box-shadow 200ms
+    transition all 200ms
     user-select none
     appearance button
-    -webkit-text-fill-color #fff
 
     @media ( -webkit-min-device-pixel-ratio 2 )
         @supports not ( border-width 0.5px )
@@ -47,38 +46,38 @@ $colors = $vars.colors
         border-radius inherit
         pointer-events none
 
-    &:before
-        transition box-shadow 200ms
-
     &:after
         top -1px
-        right -1px
-        bottom -1px
-        left -1px
-        background-color #fff
-        content ""
-        opacity 0
-        transition opacity 200ms
+        right @top
+        bottom @top
+        left @top
+        transition box-shadow 200ms
 
-    &:disabled
-    &.disabled
+    &[disabled]
         opacity 0.6
         cursor not-allowed
 
-    &.disabled
-        pointer-events none
+        &.loading
+            opacity 1
 
-    &:not(:disabled):not(.disabled)
-        &:hover:after
-            opacity 0.2
+        &:not(:disabled)
+            pointer-events none
 
-        &:active:after
-            background-color #000
+    &:not([disabled])
+        &:hover
+            opacity 0.8
 
-    &:focus:before
+    &:active
+        filter brightness( 0.9 )
+
+    &:focus:after
         z-index 2
         box-shadow 0 0 0 3px
-        opacity 0.5
+        content ""
+        opacity 0.6
+
+    &:active:after
+        background-color rgba( 0, 0, 0, 0.2 )
 
     $size( height, padding, font )
         padding 0 padding
@@ -134,11 +133,9 @@ $colors = $vars.colors
 
     &.light
         color: $colors.gray-light
-        -webkit-text-fill-color: $colors.black
 
     &.hollow
         background none
-        -webkit-text-fill-color inherit
 
     &.borderless
         border-width 0
@@ -151,5 +148,14 @@ $colors = $vars.colors
         &:not(:first-child)
             margin-left 8px
 
-    &__loading
-        display none
+        &:not(:last-child)
+            margin-right 8px
+
+    &>.loading
+        position absolute
+
+    .white
+        color #fff
+
+    .hidden
+        visibility hidden

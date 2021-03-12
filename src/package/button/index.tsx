@@ -1,10 +1,11 @@
 import "./index.styl";
 import { AnchorHTMLAttributes, ButtonHTMLAttributes, CSSProperties, FC, ReactNode } from "react";
-import { BEM, classnames } from "../../util/bem";
+import classnames from "classnames";
 import "./index.styl";
 import { fixUnit } from "../../util/unit";
 import Icon from "../icon";
 import Loading, { LoadingProps } from "../loading";
+
 export const buttonConfig = {};
 export type ButtonProps = AnchorHTMLAttributes<HTMLElement> &
 	Omit<ButtonHTMLAttributes<HTMLElement>, "type"> &
@@ -24,7 +25,9 @@ export type ButtonProps = AnchorHTMLAttributes<HTMLElement> &
 		iconSlot: ReactNode;
 		label: string;
 		loading: boolean;
+		loadingConfig: LoadingProps;
 		loadingIcon: LoadingProps["type"];
+		loadingKeepText: boolean;
 		nativeType: "button" | "submit" | "reset";
 		hollow: boolean;
 		replace: boolean;
@@ -56,7 +59,8 @@ export const Button: FC<ButtonProps> = ({
 	iconSlot,
 	label,
 	loading,
-	loadingIcon,
+	loadingConfig,
+	loadingKeepText,
 	nativeType = "button",
 	hollow,
 	round = "xs",
@@ -71,11 +75,11 @@ export const Button: FC<ButtonProps> = ({
 	...rest
 }: ButtonProps) => {
 	const Tag = to !== undefined ? "link" : href !== undefined ? "a" : "button";
-	const isButtonNode = Tag === "button";
+	// const isButtonNode = Tag === "button";
 
 	const props: Record<any, any> = {
 		className: classnames("button", type, size, className, {
-			disabled: !isButtonNode && disabled,
+			// disabled: !isButtonNode && disabled,
 			harline,
 			square,
 			["rounded--" + round]: round,
@@ -95,20 +99,23 @@ export const Button: FC<ButtonProps> = ({
 			},
 			style
 		),
-		disabled: isButtonNode && (disabled || loading),
+		disabled: disabled || loading,
+		...rest,
 	};
 	if (Tag == "link") props.to = to;
 	else if (Tag == "a") props.href = href;
 	else if (Tag == "button") props.type = nativeType;
 
 	const text = children || label;
-	const innerClassname = classnames("button__text", { button__loading: loading });
+
 	return (
-		<Tag {...props} {...rest}>
-			{loading && <Loading type={loadingIcon} />}
-			{iconSlot || (icon && <Icon name={icon} className="button__text" />)}
-			{text && <span className={innerClassname}>{text}</span>}
-			{iconRightSlot || (iconRight && <Icon name={iconRight} className={innerClassname} />)}
+		<Tag {...props}>
+			{loading && <Loading {...loadingConfig} />}
+			<div className={classnames("button__inner", { white: !hollow, hidden: loading })}>
+				{iconSlot || (icon && <Icon name={icon} />)}
+				{text && <span className="button__text">{text}</span>}
+				{iconRightSlot || (iconRight && <Icon name={iconRight} />)}
+			</div>
 		</Tag>
 	);
 };
