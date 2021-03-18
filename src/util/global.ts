@@ -26,7 +26,7 @@ declare global {
 	type Template<M extends string, N extends string> = `${M}-${N}`;
 	type Valueof<T extends object> = T[keyof T];
 	type Color = keyof typeof colors;
-	type AsyncCallBack<State, CurrentState> = (done: (state: State) => void, currentState: CurrentState) => void;
+	type AsyncCallBack<Params, State> = (done: (state: Params) => any, state: State) => void;
 
 	interface WindowEventMap {
 		breakpointchange: CustomEvent<breapointEventData>;

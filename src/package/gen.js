@@ -52,29 +52,27 @@ export const Demo = () => {
 
 	fs.writeFileSync(storybook, data);
 	data = `
-  import { FC, CSSProperties } from "react";
-  import classnames from "classnames";
-  import "./index.styl";
-  export type ${pascal}Props = {
-    className: string,
-    style: CSSProperties,
-  };
-  
-  export const ${pascal}: FC<${pascal}Props> = ({ className, style, children, ...rest }) => {
+import classnames from "classnames";
+import "./index.styl";
+export type ${pascal}Props = Partial<{
+
+}>;
+
+export const ${pascal}: CFC<${pascal}Props> = ({ className, style, children, ...rest }) => {
     function clickHandler(){}
     const props = {
-      className: classnames("${name}",{
-  
-      }),
-      style:{
+        className: classnames("${name}",{
+
+        }),
+        style:{
         ...style
-      },
-      onClick:clickHandler,
-      ...rest,
+        },
+        onClick:clickHandler,
+        ...rest,
     };
     return <div {...props}>{children}</div>;
-  };
-  export default ${pascal};
+};
+export default ${pascal};
   `.trim();
 	fs.writeFileSync(tsx, data);
 	console.log(`位于${file}处的组件创建完毕!`);

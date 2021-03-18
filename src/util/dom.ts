@@ -49,7 +49,7 @@ if (global.responsive) {
 /** 客户端渲染 */
 export const CSR = !!(typeof window !== "undefined" && window);
 
-export function getNode(selector: string | Element, parent: HTMLElement = document.body) {
+export function querySelector(selector: string | Element, parent: HTMLElement = (document as unknown) as HTMLElement) {
 	if (selector instanceof Element) return selector;
 	if (typeof selector === "string") return parent.querySelector(selector);
 	throw new Error("invalid selector");
@@ -69,6 +69,12 @@ export function createElement(tagName: string, options?: ElementCreationOptions)
 	return node;
 }
 
+export function createElementWidthStyle(tagName: string, styles: CSSProperties) {
+	const el = document.createElement(tagName);
+	Object.assign(el.style, styles);
+	return el;
+}
+
 export function createNode(parent: Node | HTMLElement, tag = "div", options?: HTMLAttributes<Element>): HTMLElement {
 	return parent.appendChild(Object.assign(createElement(tag), options));
 }
@@ -79,76 +85,12 @@ export function removeAllChildren(node: Node) {
 	}
 }
 
-export function diffStyle<T = CSSProperties>(prev: T = {} as any, next: T = {} as any) {
-	const ret = {} as T;
-	const prevKeys = Object.keys(prev);
-	const nextKeys = Object.keys(next);
-	let i = prevKeys.length;
-	let key = "";
-	while (i--) {
-		key = prevKeys[i];
-		// @ts-ignore
-		if (!next[key]) ret[key] = "";
-	}
-	i = prevKeys.length;
-	while (i--) {
-		key = nextKeys[i];
-		// @ts-ignore
-		ret[key] = next[key];
-	}
-	return ret;
+export function scrollbarWidth(el: HTMLElement) {
+	if (!CSR || !el) return 0;
+	if (el === document.body) return window.innerWidth - document.documentElement.offsetWidth;
+	return el.offsetWidth - el.scrollWidth;
 }
 
-export function scrollbarWidth(el: Element) {
-	if (el === document.body) return el.scrollWidth - window.innerWidth;
-	return el.scrollWidth - el.clientWidth;
-}
-
-interface PatchMeta {
-	count: number;
-	paddingRight: CSSStyleDeclaration["paddingRight"];
-	overflowY: CSSStyleDeclaration["overflowY"];
-}
-
-const patched = new WeakMap<HTMLElement, PatchMeta>();
-
-export function patchElement(el: HTMLElement) {
-	const meta = patched.get(el);
-	if (meta) {
-		meta.count++;
-	} else {
-		const { overflowY, paddingRight } = el.style;
-		const oldPadding = getComputedStyle(el).paddingRight;
-		const newPadding = parseFloat(oldPadding || "0") || scrollbarWidth(el);
-
-		Object.assign(el.style, {
-			overflowY: "hidden",
-			paddingRight: `${newPadding}px`,
-		} as CSSProperties);
-
-		patched.set(el, {
-			count: 1,
-			overflowY,
-			paddingRight,
-		});
-	}
-}
-
-export function restoreElement(el: HTMLElement) {
-	const meta = patched.get(el);
-	if (!meta) {
-		throw new Error("This looks like a bug of lib,please contact us");
-	}
-	if (meta.count === 1) {
-		patched.delete(el);
-		Object.assign(el.style, {
-			overflowY: meta.overflowY,
-			paddingRight: meta.paddingRight,
-		} as CSSProperties);
-	} else {
-		meta.count -= 1;
-	}
-}
 type E = HTMLElement | Window | Document;
 export function on<K extends keyof HTMLElementEventMap>(
 	el: E,

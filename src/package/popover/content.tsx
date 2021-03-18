@@ -1,7 +1,6 @@
 import cx from "classnames";
 import { createContext, RefObject } from "react";
 import { Subject } from "rxjs";
-import { PortalHandlers } from "../portal";
 import { PopoverContext } from "./context";
 import { INVISIBLE_POSITION } from "./placement/invisible";
 import { PopoverPosition, Rect } from "./position";

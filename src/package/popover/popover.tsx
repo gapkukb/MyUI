@@ -4,7 +4,7 @@ import "./index.styl";
 import PopoverAnchor from "./anchor";
 import PopoverContext, { PopoverContentImperativeHandle } from "./context";
 import { PopoverPositionFunction } from "./position";
-import { PortalHandlers } from "../portal";
+// import { PortalHandlers } from "../portal";
 
 export type PopoverProps = {
 	position: PopoverPositionFunction;
@@ -40,7 +40,7 @@ export class Popover extends Component<PopoverProps, PopoverState> {
 	private pendingOnBeforeHook = false;
 	private didMountHooks: Array<() => () => void> = [];
 	private didMountCleanup: Array<() => void> = [];
-	readonly portalRef = createRef<PortalHandlers>();
+	// readonly portalRef = createRef<PortalHandlers>();
 	readonly contentRef = createRef<PopoverContentImperativeHandle>();
 	isPositionReady = false;
 	getAnchor: (() => Element | Text | null) | null = null;
@@ -115,7 +115,7 @@ export class Popover extends Component<PopoverProps, PopoverState> {
 					placement: position,
 					cushion,
 					className,
-					protalRef: this.portalRef,
+					// protalRef: this.portalRef,
 					popover: this,
 					mounted: this.didMount,
 					mount: containerSelector,
