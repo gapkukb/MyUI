@@ -2,6 +2,7 @@ import { createContext, CSSProperties, RefObject, useContext } from "react";
 // import { PortalHandlers } from "../portal";
 import { PopoverPositionFunction } from "./position";
 import { Popover } from "./popover";
+import { PortalImperativeHandlers } from "../portal";
 
 export interface PopoverContentImperativeHandle {
 	adjustPosition(): void;
@@ -13,7 +14,7 @@ export interface PopoverContext {
 	mount: string;
 	placement: PopoverPositionFunction;
 	cushion: number;
-	// protalRef: RefObject<PortalHandlers>;
+	protalRef: RefObject<PortalImperativeHandlers>;
 	className?: string;
 	contentRef: RefObject<PopoverContentImperativeHandle>;
 	mounted(cb: () => () => void): void;

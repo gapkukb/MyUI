@@ -208,7 +208,7 @@ export const Portal = forwardRef<PortalImperativeHandlers, PortalProps>((props, 
 
 	return visible && node ? (
 		<PurePortal ref={purePortalRef} replace={replace} selector={node}>
-			{/* <div className="popup">{children}</div> */}
+			{/* <MountElement node={node} getParent={getParent} selector={selector} /> */}
 			{children}
 		</PurePortal>
 	) : null;

@@ -87,7 +87,7 @@ const overlay = {
 		this.el.onclick = function () {
 			document.dispatchEvent(outclickEvent);
 		};
-		this.hide();
+		// this.hide();
 		return this;
 	},
 }.init();

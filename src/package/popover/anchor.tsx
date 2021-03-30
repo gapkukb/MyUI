@@ -2,13 +2,13 @@ import { Component } from "react";
 import { findDOMNode } from "react-dom";
 import Context, { PopoverContext } from "./context";
 
-export type PopoverAnchorGetElement = (node: Element | Text | null) => Element | Text | null;
-export interface PopoverAnchorProps {
+export type AnchorSelector = (node: Element | Text | null) => Element | Text | null;
+export interface AnchorProps {
 	onClick?: () => void;
-	selector?: PopoverAnchorGetElement;
+	selector?: AnchorSelector;
 }
 
-export class PopoverAnchor extends Component<PopoverAnchorProps> {
+export class Anchor extends Component<AnchorProps> {
 	static contextType = Context;
 	context!: PopoverContext;
 	selector() {
@@ -30,4 +30,4 @@ export class PopoverAnchor extends Component<PopoverAnchorProps> {
 	}
 }
 
-export default PopoverAnchor;
+export default Anchor;

@@ -1,7 +1,7 @@
 import { FC, CSSProperties, Component, createRef } from "react";
 import classnames from "classnames";
 import "./index.styl";
-import PopoverAnchor from "./anchor";
+import Anchor from "./anchor";
 import PopoverContext, { PopoverContentImperativeHandle } from "./context";
 import { PopoverPositionFunction } from "./position";
 // import { PortalHandlers } from "../portal";
@@ -33,7 +33,7 @@ export interface PopoverState {
 
 export class Popover extends Component<PopoverProps, PopoverState> {
 	static contextType = PopoverContext;
-	static Anchor = PopoverAnchor;
+	static Anchor = Anchor;
 	static Content = PopoverContext;
 	// static Trigger = Trigger;
 	private isUnmounted = false;

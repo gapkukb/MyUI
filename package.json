@@ -63,6 +63,7 @@
 		"react-dom": "^17.0.1",
 		"react-refresh": "^0.8.3",
 		"react-router-dom": "^5.2.0",
+		"react-transition-group": "^4.4.1",
 		"resolve": "1.18.1",
 		"resolve-url-loader": "^3.1.2",
 		"rxjs": "^6.6.6",
@@ -106,6 +107,7 @@
 	"devDependencies": {
 		"@storybook/react": "^6.1.18",
 		"@types/classnames": "^2.2.11",
+		"@types/react-transition-group": "^4.4.1",
 		"classnames": "^2.2.6",
 		"stylus": "^0.54.8",
 		"stylus-loader": "^4.3.3"
